@@ -48,6 +48,7 @@ Each Filesytem's key is the FS `Label`: This explains each key in a filesystem e
 # USAGE
 
 role some_role.json:
+
       {
         "override_attributes": {
           "filesystems": {  
