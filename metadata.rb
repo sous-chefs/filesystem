@@ -14,7 +14,7 @@ depends 'databag-helper'
 attribute'node[:filesystems_bag]',
   :description => "bagname to look for this fqdn's filesystems",
   :type => "hash",
-  :required => "no"
+  :required => "recommended"
 
 attribute'node[:filesystems]',
   :description => "Filesystems to be manages/built",
