@@ -1,7 +1,7 @@
 maintainer       "Jesse Nelson"
 maintainer_email "spheromak@gmail.com"
 description      "Installs/Configures various filesystems"
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "0.6.3"
 
 %w/redhat centos xenserver ubuntu debian/.each do |os|
