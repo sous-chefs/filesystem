@@ -35,10 +35,9 @@ size = @new_resource.size
     # LVM
     if @new_resource.vg
       # We use the lvm provider directly.
-      lvm_volume_group vg do
-        logical_volume label do
-          size size
-        end
+      lvm_logical_volume label do
+        group vg
+        size size
       end
     end
 
