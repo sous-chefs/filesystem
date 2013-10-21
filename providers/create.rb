@@ -1,48 +1,55 @@
 action :create do
 
-unless @new_resource.label
-  label = @new_resource.name
-else
-  label = @new_resource.label
-end
-if @new_resource.file
-  device = @new_resource.device
-elsif @new_resource.vg
-  device = "/dev/mapper/#{@new_resource.vg}-#{label}"
-elsif @new_resource.uuid
-  device = "/dev/disk/by-uuid/#{@new_resource.uuid}"
-elsif @new_resource.device
-  device = @new_resource.device
-else
-  device = "/dev/mapper/#{label}"
-end
-fstype = @new_resource.fstype
-user = @new_resource.user
-group = @new_resource.group
-mode = @new_resource.mode
-pass = @new_resource.pass
-dump = @new_resource.dump
-options = @new_resource.options
+  unless @new_resource.label
+    label = @new_resource.name
+  else
+    label = @new_resource.label
+  end
+  if @new_resource.file
+    device = @new_resource.device
+  elsif @new_resource.vg
+    device = "/dev/mapper/#{@new_resource.vg}-#{label}"
+  elsif @new_resource.uuid
+    device = "/dev/disk/by-uuid/#{@new_resource.uuid}"
+  elsif @new_resource.device
+    device = @new_resource.device
+  else
+    device = "/dev/mapper/#{label}"
+  end
+  fstype = @new_resource.fstype
+  mkfs_options = @new_resource.mkfs_options
+  user = @new_resource.user
+  group = @new_resource.group
+  mode = @new_resource.mode
+  pass = @new_resource.pass
+  dump = @new_resource.dump
+  options = @new_resource.options
 
-vg = @new_resource.vg
-file = @new_resource.file
-sparse = @new_resource.sparse
-size = @new_resource.size
+  vg = @new_resource.vg
+  file = @new_resource.file
+  sparse = @new_resource.sparse
+  size = @new_resource.size
+  stripes = @new_resource.stripes ? @new_resource.stripes : nil
+  mirrors = @new_resource.mirrors ? @new_resource.stripes : nil
+
+  force = @new_resource.force
 
   # In two cases we may need to idempotently create the storage before creating the filesystem on it: LVM and file-backed.
-  if ( ( @new_resource.vg || @new_resource.file ) && ( @new_resource.size != nil ) && ( @new_resource.mkstorage ) )
+  if ( ( vg || file ) && ( size != nil ) && ( mkstorage = true ) )
 
     # LVM
-    if @new_resource.vg
+    if vg
       # We use the lvm provider directly.
       lvm_logical_volume label do
         group vg
         size size
+        stripes if stripes =! nil
+        mirrors if mirrors =! nil
       end
     end
 
     # File-backed
-    if @new_resource.file
+    if file
       # We use the local filebackend provider, to which we feed some variables including the loopback device we want.
       filesystems_filebacked file do
         device device
@@ -60,7 +67,7 @@ size = @new_resource.size
     generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
 
     # Install the filesystem's default package and recipes as configured in attributes.
-    fs_tools = node[:filesystems_tools][@new_resource.fstype]
+    fs_tools = node[:filesystems_tools][fstype]
     # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
     # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
     if fs_tools['package']
@@ -70,10 +77,10 @@ size = @new_resource.size
 
     # If we were keyed to use specific package or cookbooks we attempt to install those too.
     # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
-    #if @new_resource.recipe
-    #  (@new_resource.recipe.split(',') || []).each {|keyed_recipe| include_recipe "#{keyed_recipe}"}
+    #if recipe
+    #  (recipe.split(',') || []).each {|keyed_recipe| include_recipe "#{keyed_recipe}"}
     #end
-    if @new_resource.package
+    if package
       packages = @new_resource.package.split(',')
       (packages || []).each {|keyed_package| package "#{keyed_package}"}
     end
@@ -81,9 +88,9 @@ size = @new_resource.size
     log "filesystem #{label} creating #{fstype} on #{device}"
 
     # We form our mkfs command
-    mkfs_cmd = "mkfs -t #{fstype} #{@new_resource.mkfs_options} -L #{label} #{device}"
+    mkfs_cmd = "mkfs -t #{fstype} #{mkfs_options} -L #{label} #{device}"
   
-    if @new_resource.force
+    if force
  
      # We we create the filesystem without any checks, and we ignore failures. This is sparta, etc.
       execute mkfs_cmd do
@@ -108,35 +115,37 @@ end
 # If we're enabling, we create the fstab entry.
 action :enable do
 
-unless @new_resource.label
-  label = @new_resource.name
-else
-  label = @new_resource.label
-end
-if @new_resource.file
-  device = @new_resource.device
-elsif @new_resource.vg
-  device = "/dev/mapper/#{@new_resource.vg}-#{label}"
-elsif @new_resource.uuid
-  device = "/dev/disk/by-uuid/#{@new_resource.uuid}"
-elsif @new_resource.device
-  device = @new_resource.device
-else
-  device = "/dev/mapper/#{label}"
-end
-fstype = @new_resource.fstype
-user = @new_resource.user
-group = @new_resource.group
-mode = @new_resource.mode
-pass = @new_resource.pass
-dump = @new_resource.dump
-options = @new_resource.options
+  unless @new_resource.label
+    label = @new_resource.name
+  else
+    label = @new_resource.label
+  end
 
+  if @new_resource.file
+    device = @new_resource.device
+  elsif @new_resource.vg
+    device = "/dev/mapper/#{@new_resource.vg}-#{label}"
+  elsif @new_resource.uuid
+    device = "/dev/disk/by-uuid/#{@new_resource.uuid}"
+  elsif @new_resource.device
+    device = @new_resource.device
+  else
+    device = "/dev/mapper/#{label}"
+  end
 
-  if @new_resource.mount
+  mount = @new_resource.mount
+  fstype = @new_resource.fstype
+  user = @new_resource.user
+  group = @new_resource.group
+  mode = @new_resource.mode
+  pass = @new_resource.pass
+  dump = @new_resource.dump
+  options = @new_resource.options
+
+  if mount
 
     # We use the chef directory method to create the mountpoint with the settings we provide
-    directory @new_resource.mount do
+    directory mount do
       recursive true
       owner user if user
       group group if group
@@ -144,7 +153,7 @@ options = @new_resource.options
     end
 
     # Mount using the chef resource
-    mount @new_resource.mount do
+    mount mount do
       device device
       fstype fstype
       pass pass
@@ -161,34 +170,34 @@ end
 # If we're mounting, we mount.
 action :mount do
 
-unless @new_resource.label
-  label = @new_resource.name
-else
-  label = @new_resource.label
-end
-if @new_resource.file
-  device = @new_resource.device
-elsif @new_resource.vg
-  device = "/dev/mapper/#{@new_resource.vg}-#{label}"
-elsif @new_resource.uuid
-  device = "/dev/disk/by-uuid/#{@new_resource.uuid}"
-elsif @new_resource.device
-  device = @new_resource.device
-else
-  device = "/dev/mapper/#{label}"
-end
-fstype = @new_resource.fstype
-user = @new_resource.user
-group = @new_resource.group
-mode = @new_resource.mode
-pass = @new_resource.pass
-dump = @new_resource.dump
-options = @new_resource.options
+  unless @new_resource.label
+    label = @new_resource.name
+  else
+    label = @new_resource.label
+  end
 
-  if @new_resource.mount
+  if @new_resource.file
+    device = @new_resource.device
+  elsif @new_resource.vg
+    device = "/dev/mapper/#{@new_resource.vg}-#{label}"
+  elsif @new_resource.uuid
+    device = "/dev/disk/by-uuid/#{@new_resource.uuid}"
+  elsif @new_resource.device
+    device = @new_resource.device
+  else
+    device = "/dev/mapper/#{label}"
+  end
+
+  mount = @new_resource.mount
+  fstype = @new_resource.fstype
+  user = @new_resource.user
+  group = @new_resource.group
+  options = @new_resource.options
+
+  if mount
 
     # We use the chef directory method to create the mountpoint with the settings we provide
-    directory @new_resource.mount do
+    directory mount do
       recursive true
       owner user if user
       group group if group
@@ -196,7 +205,7 @@ options = @new_resource.options
     end
     
     # Mount using the chef resource
-    mount @new_resource.mount do
+    mount mount do
       device device
       fstype fstype
       options options

@@ -26,6 +26,8 @@ action :create do
       mkstorage fs["mkstorage"] if fs["mkstorage"]
       sparse fs["sparse"] if fs["sparse"]
       size fs["size"] if fs["size"]
+      stripes fs["stripes"] if fs["stripes"]
+      mirrors fs["mirrors"] if fs["mirrors"]
       mount fs["mount"] if fs["mount"]
       options fs["options"] if fs["options"]
       user fs["user"] if fs["user"]

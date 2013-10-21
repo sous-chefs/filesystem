@@ -22,6 +22,8 @@ attribute :recipe, :kind_of => String
 attribute :mkstorage, :kind_of => [ TrueClass, FalseClass ], :default => true
 attribute :sparse, :kind_of => [ TrueClass, FalseClass ], :default => true
 attribute :size, :kind_of => String
+attribute :stripes, :kind_of => Fixnum
+attribute :mirrors, :kind_of => Fixnum
 
 # Mounting Options
 attribute :mount, :kind_of => String
