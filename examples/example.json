@@ -1,0 +1,63 @@
+{
+    "filesystems": {
+        "xfsdisk": {
+            "device": "/dev/xvdc",
+            "mount": "/mnt/filesystems-testing/xfstest",
+            "fstype": "xfs",
+            "optons": "noatime,nobarrier",
+            "mkfs_options": "-d sunit=128,swidth=2048"
+        },
+        "nobody777": {
+            "file": "/mnt/filesystems-testing/nobody777.file",
+            "device": "/dev/loop0",
+            "mount": "/mnt/filesystems-testing/nobody777",
+            "user": "nobody",
+            "group": "nobody",
+            "mode": "777",
+            "noenable": true,
+            "size": "1000"
+        },
+        "ext2file": {
+            "file": "/mnt/filesystems-testing/ext2file.file",
+            "device": "/dev/loop1",
+            "mount": "/mnt/filesystems-testing/ext2file",
+            "fstype": "ext2",
+            "noenable": "true",
+            "size": "10000"
+        },
+        "sparsefalse": {
+            "file": "/mnt/filesystems-testing/sparsefalse.file",
+            "device": "/dev/loop2",
+            "mount": "/mnt/filesystems-testing/sparsefalse",
+            "noenable": true,
+            "sparse": false,
+            "size": "1000"
+        },
+        "nofstab": {
+            "file": "/mnt/filesystems-testing/nofstab.file",
+            "device": "/dev/loop3",
+            "mount": "/mnt/filesystems-testing/nofstab",
+            "noenable": true,
+            "size": "100"
+        },
+        "nomount0": {
+            "file": "/mnt/filesystems-testing/nomount1-mountmissing.file",
+            "device": "/dev/loop4",
+            "size": "100"
+        },
+        "nomount1": {
+            "file": "/mnt/filesystems-testing/nomount0-nomounttrue.file",
+            "device": "/dev/loop5",
+            "mount": "/mnt/filesystems-testing/nomount0-nomounttrue",
+            "nomount": true,
+            "size": "100"
+        },
+        "nostorage": {
+            "file": "/mnt/filesystems-testing/mkstoragefalse.file",
+            "device": "/dev/loop6",
+            "mount": "/mnt/filesystems-testing/mkstoragefalse",
+            "mkstorage": false,
+            "size": "100"
+        }
+    }
+}
