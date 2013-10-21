@@ -2,11 +2,17 @@
 
 # This is the default recipe's contents:
 
+# We want to support LVM and xfs
+include_recipe "lvm"
+include_recipe "xfs"
+
 # If we have contents at the default location, we try to make the filesystems with the LWRP.
 filesystems_make_all_from_key "filesystems" do
   action :create
   not_if ( node[:filesystems] == nil || node[:filesystems].empty? )
 end
+
+## Examples:
 
 # But there are always ways to do non-defaulty things
 
@@ -24,4 +30,3 @@ filesystems_create "littlelabel" do
   mount "/mnt/littlelabel"
   actions [:create, :enable, :mount]
 end
-

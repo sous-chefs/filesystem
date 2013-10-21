@@ -5,10 +5,10 @@ This cookbook exists to generically define and create filesystems with the minim
 
 This cookbook supports four main types of block devices:
 
-normal `device` - drives, ssds, volumes presented by HBAs etc
-device ID `uuid` - mostly found on drives / known block IDs.
-lvm Volume Groups `vg` - found on systems using LVM.
-file-backed `file` - created dynamically and looped back - will not come up on reboot, but we will try to remount existing `file` storage in chef.
+* normal `device` - drives, ssds, volumes presented by HBAs etc
+* device ID `uuid` - mostly found on drives / known block IDs.
+* LVM Volume Groups `vg` - found on systems using LVM.
+* file-backed `file` - created dynamically and looped back - will not come up on reboot, but we will try to remount existing `file` storage in chef.
 
 We will try to create filesystems in two ways: through keys found in node data, or by being called directly with the `filesystems_create` provider. See the example recipe.
 
@@ -22,7 +22,7 @@ Requirements
 Main Attributes
 ===============
 
-##### `filesystems`  
+##### `filesystems` 
 Hash of filesytems to setup
 ##### `node[:filesystems]` keys:
 Each filesytem's key is the FS `label`: This explains each key in a filesystems entry. The label must not exceed 12 characters.
@@ -41,6 +41,8 @@ Path to the file-backed storage to be used for a loopback device. If not present
 ##### `vg`
 Name of the LVM volume group use as backing store for a logical volume. If not present it will be created, as long as a size is given.
 
+Each filesystem should be given one of these attributes for it to have a location to be created at. 
+
 If none of these are present then we try to find a device at the label itself.
 
 Filesystem Creation Options
@@ -54,7 +56,7 @@ Options to pass to mkfs at creation time.
 Filesystem Backing Options
 ==========================
 
-##### `size`
+##### `size` 10000 (`file`) or 10%VG|10g (`vg`)
 The size, only used for filesystems backed by `vg` and `file` storage. If vg then a number suffixied by the scale [g|m|t|p], if a file then just a number [megabytes].
 ##### `sparse` Boolean (default: true)
 Sparse file creation, used by the `file` storage, by default we use this for speed, but you may not want that.
@@ -74,10 +76,10 @@ Options to mount with and add to the fstab.
 Dump entry for fstab
 ##### `pass` 0|1|2 (default: 0)
 Pass entry for fstab
-##### `user` user name
-Owner of the mountpoint, otherwise we use the chef default. We will not try to create users. You should use the user cookbook for that.
-##### `group` group name
-Group of the mountpoint, otherwise we use the chef default. We will not try to create groups. You should use the user cookbook for that.
+##### `user` name
+Owner of the mountpoint, otherwise we use the chef default. We will not try to create users. You should use the users cookbook for that.
+##### `group` name
+Group of the mountpoint, otherwise we use the chef default. We will not try to create groups. You should write a cookbook to make them nicely.
 ##### `mode` 775
 Mode of the mountpoint, otherwise we use the chef default.
 
@@ -93,11 +95,9 @@ Atypical Behaviour Modifiers
 ============================
 
 ##### `force` Boolean (default: false)
-Set to true we unsafely create filesystems even if they already exist.
-##### `mkstorage` Boolean (default: true)
-Set to false to avoid creating logical volumes or file-backed storage.
-##### `mkfs` Boolean (default: true)
-Set to false to disable creation of the filesystem.
+Set to true we unsafely create filesystems even if they already exist. If there is data it will be lost. Should not use this unless you are quite confident.
+##### `nomkfs` Boolean (default: false)
+Set to true to disable creation of the filesystem.
 ##### `nomount` Boolean (default: false)
 Set to true to disable mounting of the filesystem.
 ##### `noenable` Boolean (default: false)
@@ -110,7 +110,7 @@ Usage
 {
  "filesystems": { 
    "testfs1": {
-     "device": "/dev/sdb"
+     "device": "/dev/sdb",
      "mount": "/db",
      "fstype", "xfs",
      "optons": "noatime,nobarrier",

@@ -32,10 +32,13 @@ action :create do
   stripes = @new_resource.stripes ? @new_resource.stripes : nil
   mirrors = @new_resource.mirrors ? @new_resource.stripes : nil
 
+  recipe = @new_resource.recipe
+  package = @new_resource.package
+
   force = @new_resource.force
 
   # In two cases we may need to idempotently create the storage before creating the filesystem on it: LVM and file-backed.
-  if ( ( vg || file ) && ( size != nil ) && ( mkstorage = true ) )
+  if ( ( vg || file ) && ( size != nil ) )
 
     # LVM
     if vg

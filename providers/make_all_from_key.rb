@@ -23,7 +23,6 @@ action :create do
       mkfs_options fs["mkfs_options"] if fs["mkfs_options"]
       recipe fs["recipe"] if fs["recipe"]
       package fs["package"] if fs["package"]
-      mkstorage fs["mkstorage"] if fs["mkstorage"]
       sparse fs["sparse"] if fs["sparse"]
       size fs["size"] if fs["size"]
       stripes fs["stripes"] if fs["stripes"]
@@ -43,11 +42,14 @@ action :create do
       elsif ( fs["mount"] && fs["noenable"] )
         # We we not enable the fs in fstab, but we do mount it.
         action [:create, :mount]
+      elsif ( fs["nomkfs"] )
+        # We don't create - we just mount and enable - like the mount resource would do.
+        action [:enable, :mount]
       elsif fs["mount"]
-        # Sensible behiavour - create, enable and mount
+        # Default expected behiavour - create, enable and mount
         action [:create, :enable, :mount]
       else
-        # Expected behaviour if no mountpoint is given : we only create the filesystem, nothing else.
+        # Non-default expected behaviour if no mountpoint is given : we only create the filesystem, nothing else.
         action [:create]
       end
 

@@ -3,7 +3,8 @@
         "mnt": {
             "device": "/dev/xvdb",
             "fstype": "ext3",
-            "mount": "/mnt"
+            "mount": "/mnt",
+            "nomkfs": true
         },
         "lvmbar1": {
             "vg": "foo",
@@ -71,14 +72,6 @@
             "device": "/dev/loop5",
             "mount": "/mnt/filesystems-testing/nomount0-nomounttrue",
             "nomount": true,
-            "size": "100"
-        },
-        "nostorage": {
-            "file": "/mnt/filesystems-testing/mkstoragefalse.file",
-            "device": "/dev/loop6",
-            "mount": "/mnt/filesystems-testing/mkstoragefalse",
-            "noenable": true,
-            "mkstorage": false,
             "size": "100"
         }
     }

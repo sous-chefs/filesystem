@@ -25,18 +25,16 @@ action :create do
 
   elsif ( ::File.exists?(file) && device =! loopback )
     # Case 2)
-    # File but no loopback - so we make a loopback.
+    # File but no loopback - so we make a loopback
 
     log "Creating #{device} for #{file}"
     execute create_loopback do
       only_if "ls #{file} >/dev/null"
     end
 
-    log `#{get_loopback_cmd}`
-
-  elsif size != nil
+  elsif ( size != nil )
     # Case 3)
-    # If we have a size, we can create the file
+    # If we have a size, we can create the file..
 
     # We make sure a directory exists for the file to live in.
     directory ::File.dirname(file) do
@@ -54,8 +52,9 @@ action :create do
 
     log "Creating #{file}"
 
-    # We create the file, but only if there is not already a loopback device mapped for it.
+    # We create the file
     execute file_creation_cmd do
+      not_if "ls #{file} >/dev/null"
     end
 
     # If the file was created, we make a loopback device for the file and return the loopback result.
@@ -63,8 +62,6 @@ action :create do
     execute create_loopback do
       only_if "ls #{file} >/dev/null"
     end
-    
-    log `#{get_loopback_cmd}`
 
   end
 
