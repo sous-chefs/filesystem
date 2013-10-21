@@ -15,13 +15,16 @@
             "vg": "foo",
             "fstype": "ext2",
             "mount": "/mnt/filesystems-testing/lvm-vg-foo-lv-lvmbar2",
-            "size": "10%VG"
+            "size": "10%VG",
+            "stripes": 2
         },
         "lvmbar3": {
             "vg": "foo",
             "fstype": "ext4",
             "mount": "/mnt/filesystems-testing/lvm-vg-foo-lv-lvmbar3",
-            "size": "10%VG"
+            "size": "10%VG",
+            "stripes": 2,
+            "mirrors": 2
         },
         "nobody777": {
             "file": "/mnt/filesystems-testing/nobody777.file",
