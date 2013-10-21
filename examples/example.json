@@ -1,11 +1,27 @@
 {
     "filesystems": {
-        "xfsdisk": {
-            "device": "/dev/xvdc",
-            "mount": "/mnt/filesystems-testing/xfstest",
+        "mnt": {
+            "device": "/dev/xvdb",
+            "fstype": "ext3",
+            "mount": "/mnt"
+        },
+        "lvmbar1": {
+            "vg": "foo",
             "fstype": "xfs",
-            "optons": "noatime,nobarrier",
-            "mkfs_options": "-d sunit=128,swidth=2048"
+            "mount": "/mnt/filesystems-testing/lvm-vg-foo-lv-lvmbar1",
+            "size": "10%VG"
+        },
+        "lvmbar2": {
+            "vg": "foo",
+            "fstype": "ext2",
+            "mount": "/mnt/filesystems-testing/lvm-vg-foo-lv-lvmbar2",
+            "size": "10%VG"
+        },
+        "lvmbar3": {
+            "vg": "foo",
+            "fstype": "ext4",
+            "mount": "/mnt/filesystems-testing/lvm-vg-foo-lv-lvmbar3",
+            "size": "10%VG"
         },
         "nobody777": {
             "file": "/mnt/filesystems-testing/nobody777.file",
@@ -17,11 +33,13 @@
             "noenable": true,
             "size": "1000"
         },
-        "ext2file": {
-            "file": "/mnt/filesystems-testing/ext2file.file",
+        "xfsfile": {
+            "file": "/mnt/filesystems-testing/xfsfile.file",
             "device": "/dev/loop1",
-            "mount": "/mnt/filesystems-testing/ext2file",
-            "fstype": "ext2",
+            "mount": "/mnt/filesystems-testing/xfsfile",
+            "fstype": "xfs",
+            "options": "noatime,nobarrier",
+            "mkfs_options": "-d sunit=128,swidth=2048",
             "noenable": "true",
             "size": "10000"
         },
@@ -56,6 +74,7 @@
             "file": "/mnt/filesystems-testing/mkstoragefalse.file",
             "device": "/dev/loop6",
             "mount": "/mnt/filesystems-testing/mkstoragefalse",
+            "noenable": true,
             "mkstorage": false,
             "size": "100"
         }
