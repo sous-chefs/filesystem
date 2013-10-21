@@ -1,7 +1,7 @@
 Description
 ===========
 
-This cookbook exists to generically define and create filesystems with the minimum of inputs.
+This cookbook exists to generically define and create block device filesystems with the minimum of inputs.
 
 This cookbook supports four main types of block devices:
 
@@ -11,6 +11,10 @@ This cookbook supports four main types of block devices:
 * file-backed `file` - created dynamically and looped back - will not come up on reboot, but we will try to remount existing `file` storage in chef.
 
 We will try to create filesystems in two ways: through keys found in node data, or by being called directly with the `filesystems_create` provider. See the example recipe.
+
+You can also use your own key for a list of filesystems, see the example recipe for an example of this option.
+
+Tools have been listed in the following attribute key : filesystems_tools. This allows for extending the support to other/new filesystems.
 
 Requirements
 ============
@@ -83,8 +87,8 @@ Group of the mountpoint, otherwise we use the chef default. We will not try to c
 ##### `mode` 775
 Mode of the mountpoint, otherwise we use the chef default.
 
-Filesystem Package and Recipe Options
-=====================================
+Package and Recipe Options
+==========================
 
 ##### `package` Package name to install, if specified.
 Used to support the filesystem
