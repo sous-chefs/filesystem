@@ -4,12 +4,16 @@
             "device": "/dev/xvdb",
             "fstype": "ext3",
             "mount": "/mnt",
+            "user": "root",
+            "group": "root",
             "nomkfs": true
         },
         "lvmbar1": {
             "vg": "foo",
             "fstype": "xfs",
             "mount": "/mnt/filesystems-testing/lvm-vg-foo-lv-lvmbar1",
+            "options": "noatime,nobarrier",
+            "mkfs_options": "-d sunit=128,swidth=2048",
             "size": "10%VG"
         },
         "lvmbar2": {
@@ -32,47 +36,27 @@
             "device": "/dev/loop0",
             "mount": "/mnt/filesystems-testing/nobody777",
             "user": "nobody",
-            "group": "nobody",
+            "group": "nogroup",
             "mode": "777",
             "noenable": true,
             "size": "1000"
         },
-        "xfsfile": {
-            "file": "/mnt/filesystems-testing/xfsfile.file",
-            "device": "/dev/loop1",
-            "mount": "/mnt/filesystems-testing/xfsfile",
-            "fstype": "xfs",
-            "options": "noatime,nobarrier",
-            "mkfs_options": "-d sunit=128,swidth=2048",
-            "noenable": "true",
-            "size": "10000"
-        },
         "sparsefalse": {
             "file": "/mnt/filesystems-testing/sparsefalse.file",
-            "device": "/dev/loop2",
+            "device": "/dev/loop1",
+            "package": "e2fsprogs,e2fslibs",
             "mount": "/mnt/filesystems-testing/sparsefalse",
             "noenable": true,
             "sparse": false,
             "size": "1000"
         },
-        "nofstab": {
-            "file": "/mnt/filesystems-testing/nofstab.file",
-            "device": "/dev/loop3",
-            "mount": "/mnt/filesystems-testing/nofstab",
+        "btrfs": {
+            "fstype": "btrfs",
+            "file": "/mnt/filesystems-testing/btrfs.file",
+            "device": "/dev/loop2",
+            "mount": "/mnt/filesystems-testing/btrfs",
             "noenable": true,
-            "size": "100"
-        },
-        "nomount0": {
-            "file": "/mnt/filesystems-testing/nomount1-mountmissing.file",
-            "device": "/dev/loop4",
-            "size": "100"
-        },
-        "nomount1": {
-            "file": "/mnt/filesystems-testing/nomount0-nomounttrue.file",
-            "device": "/dev/loop5",
-            "mount": "/mnt/filesystems-testing/nomount0-nomounttrue",
-            "nomount": true,
-            "size": "100"
+            "size": "1000"
         }
     }
 }

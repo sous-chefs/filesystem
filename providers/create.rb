@@ -67,13 +67,13 @@ action :create do
     # We use this check to test if a device's filesystem is already mountable.
     generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
 
-    # Install the filesystem's default package and recipes as configured in attributes.
+    # Install the filesystem's default package and recipes as configured in default attributes.
     fs_tools = node[:filesystems_tools][fstype]
     # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
     # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
     if fs_tools['package']
       packages = fs_tools['package'].split(',')
-      (packages || []).each {|default_package| package "#{default_package}"}
+      (packages).each {|default_package| package "#{default_package}"}
     end
 
     # If we were keyed to use specific package or cookbooks we attempt to install those too.
@@ -83,7 +83,7 @@ action :create do
     #end
     if package
       packages = @new_resource.package.split(',')
-      (packages || []).each {|keyed_package| package "#{keyed_package}"}
+      (packages).each {|keyed_package| package "#{keyed_package}"}
     end
 
     log "filesystem #{label} creating #{fstype} on #{device}"
