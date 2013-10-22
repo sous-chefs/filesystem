@@ -64,7 +64,7 @@ action :create do
   # We only try and create a filesystem if the device is not mounted.
   unless is_mounted?(device)
 
-    # We use this check to test if a file is mountable or not
+    # We use this check to test if a device's filesystem is already mountable.
     generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
 
     # Install the filesystem's default package and recipes as configured in attributes.
@@ -93,14 +93,15 @@ action :create do
   
     if force
  
-     # We we create the filesystem without any checks, and we ignore failures. This is sparta, etc.
+      # We create the filesystem without any checks, and we ignore failures. This is sparta, etc.
+      # It should also be noted that forced behaviour is not default behaviour.
       execute mkfs_cmd do
         ignore_failure true
       end
 
     else
 
-      # We create the filesystem, but only if the device does not already contain a mountable filesystem, and we have the tools
+      # We create the filesystem, but only if the device does not already contain a mountable filesystem, and we have the tools.
       execute mkfs_cmd do
         only_if "which mkfs.#{fstype}"
         not_if generic_check_cmd
