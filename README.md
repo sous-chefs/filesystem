@@ -41,7 +41,7 @@ Path to the device to create the filesystem upon.
 ##### `uuid`
 UUID of the device to create the filesystem upon.
 ##### `file`
-Path to the file-backed storage to be used for a loopback device. If not present it will be created, as long as a size is given.
+Path to the file-backed storage to be used for a loopback device. `device` must also be present to specify the loopback. If the `file` is not present it will be created, as long as a size is given.
 ##### `vg`
 Name of the LVM volume group use as backing store for a logical volume. If not present it will be created, as long as a size is given.
 
@@ -110,6 +110,8 @@ Set to true to disable adding to fstab.
 Usage
 =====
 
+Keyed filesystem creation:
+
 ````JSON
 {
  "filesystems": { 
@@ -133,12 +135,24 @@ Usage
     },
    "filebacked": {
      "file": "/mnt/filesystem-on-a-filesystem.file",
+     "device": "/dev/loop7",
      "mount": "/mnt/filesystem-on-a-filesystem",
      "modfstab": "false",
      "size": "20000"
     }
   }
 }
+````
+
+Direct LWRP'd creation:
+
+````RUBY
+filesystems_create "fslabel" do
+  fstype "ext3"
+  device "/dev/sdb1"
+  mount "/mnt/littlelabel"
+  actions [:create, :enable, :mount]
+end
 ````
 
 Authors
