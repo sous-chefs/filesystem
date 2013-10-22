@@ -1,10 +1,7 @@
 action :create do
 
-  unless @new_resource.label
-    label = @new_resource.name
-  else
-    label = @new_resource.label
-  end
+  label = @new_resource.label || @new_resource.name
+
   if @new_resource.file
     device = @new_resource.device
   elsif @new_resource.vg
@@ -16,6 +13,7 @@ action :create do
   else
     device = "/dev/mapper/#{label}"
   end
+
   fstype = @new_resource.fstype
   mkfs_options = @new_resource.mkfs_options
   user = @new_resource.user
@@ -118,11 +116,7 @@ end
 # If we're enabling, we create the fstab entry.
 action :enable do
 
-  unless @new_resource.label
-    label = @new_resource.name
-  else
-    label = @new_resource.label
-  end
+  label = @new_resource.label || @new_resource.name
 
   if @new_resource.file
     device = @new_resource.device
@@ -173,11 +167,7 @@ end
 # If we're mounting, we mount.
 action :mount do
 
-  unless @new_resource.label
-    label = @new_resource.name
-  else
-    label = @new_resource.label
-  end
+  label = @new_resource.label || @new_resource.name
 
   if @new_resource.file
     device = @new_resource.device
