@@ -44,8 +44,8 @@ action :create do
       lvm_logical_volume label do
         group vg
         size size
-        stripes if stripes =! nil
-        mirrors if mirrors =! nil
+        stripes if stripes != nil
+        mirrors if mirrors != nil
       end
     end
 
