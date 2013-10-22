@@ -1,0 +1,13 @@
+{
+  "sources": {
+    "filesystems": {
+      "path": "."
+    },
+    "xfs": {
+      "locked_version": "1.1.0"
+    },
+    "lvm": {
+      "locked_version": "1.0.0"
+    }
+  }
+}

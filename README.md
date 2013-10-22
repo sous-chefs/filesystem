@@ -1,76 +1,148 @@
 Description
------------
-This is verry old code that I am extneralizing. My hope is to refactor alot of it to more digestable providers, and to leverage the LWRP for LVM. 
+===========
 
-Create mount and add to fstab filesystems defined from attributes by default filesystems will be created, added to the fstab and mounted. Unless atribs are set to tell it otherwise
+This cookbook exists to generically define and create block device filesystems with the minimum of inputs.
 
-Currently there is no remove or delete options for filesystems.  
+This cookbook supports four main types of block devices:
+
+* normal `device` - drives, ssds, volumes presented by HBAs etc
+* device ID `uuid` - mostly found on drives / known block IDs.
+* LVM Volume Groups `vg` - found on systems using LVM.
+* file-backed `file` - created dynamically and looped back - will not come up on reboot, but we will try to remount existing `file` storage in chef.
+
+We will try to create filesystems in two ways: through keys found in node data, or by being called directly with the `filesystems_create` provider. See the example recipe.
+
+You can also use your own key for a list of filesystems, see the example recipe for an example of this option.
+
+Tools have been listed in the following attribute key : filesystems_tools. This allows for extending the support to other/new filesystems.
 
 Requirements
-------------
+============
+
 * xfs cookbook when building xfs filesystems
-* ocfs2 cookbook when creating ocfs2 filesystems
+* lvm cookbook when creating logical volumes
+* package #{fstype}progs to support your chosen fstype. We provide some defaults, too.
 
-Aattributes
------------
-#### `filesystem_bag` 
-   Data bag to look for `node[:fqdn]` item describing this nodes filesystems
-#### `filesystems`   
-  Hash of filesytems to setup
+Main Attributes
+===============
 
-## `node[:filesystems]` keys:
-Each Filesytem's key is the FS `Label`: This explains each key in a filesystem entry
-#### `vg`      
-    name of the Volume group to create this under
-#### `uuid`
-    used the disk uuid to identify what disk to make this on 
-#### `device` 
-    path to the device 
-#### `type`  - _xfs|ocfs2|ext3|ext4   (default: xfs)_
-#### `size`  
-  size paramater as would be passed to lvcrate -l ( XX[g|m|t|p] )  only needed when vg is specified. and we want the lv created.
-#### `mkfs_options`  
-  Options to pass to mkfs.xfs (defaults to xfs atm)
-#### `mount_options`  
-  Options to add to the mount command (also added to fstab)
-#### `mount_point`  
-  Where to mount this filesystem. (will mkdir -p first)
-#### `mount` - _Boolean  (default: true)_
-  mount this fs ? 
-#### `mkfs`  - _Boolean  (default: true)_ 
-  make the filesystem or not
-#### `fstab` -  _Boolean  (default: true)_
-  Add entry to fstab 
-#### `make_lv` - _Boolean  (default: true)_
-  create logical volume 
+##### `filesystems` 
+Hash of filesytems to setup
+##### `node[:filesystems]` keys:
+Each filesytem's key is the FS `label`: This explains each key in a filesystems entry. The label must not exceed 12 characters.
 
+We also let you use your own top-level key if you want - see the default recipe and example recipe.
 
-# USAGE
+Filesystem Backing Location keys
+================================
 
-role some_role.json:
+##### `device`
+Path to the device to create the filesystem upon.
+##### `uuid`
+UUID of the device to create the filesystem upon.
+##### `file`
+Path to the file-backed storage to be used for a loopback device. If not present it will be created, as long as a size is given.
+##### `vg`
+Name of the LVM volume group use as backing store for a logical volume. If not present it will be created, as long as a size is given.
 
-      {
-        "override_attributes": {
-          "filesystems": {  
-            "db": {
-              "vg": "vg01",   
-              "size": "50g",
-              "mount_point": "/db",
-              "mount_optons": "noatime, nobarrier",
-              "mkfs_options": "-d sunit=128,swidth=2048"
-            },
-            "cluster_01": {
-              "type": "ocfs2",
-              "device": "/dev/mpath/ocfs01",
-              "mount_point": "/mnt/test"
-            }
-          }
-        }
-      }
+Each filesystem should be given one of these attributes for it to have a location to be created at. 
 
+If none of these are present then we try to find a device at the label itself.
 
-This creates 2 filesystems one thats /dev/vg01/db and one thats an ocfs2 volume from multipath named device ocfs01 
+Filesystem Creation Options
+===========================
 
-the Logical volume for db will be created from volume group vg01 if it doesn't already exists this lv will the be formated as xfs with d sunit=128,swidth=2048 options, and mounted on /db  (added to fstab etc etc)
+##### `fstype` [xfs|ocfs2|ext3|ext4|etc] (default: ext3)
+The type of filesystem to be created.
+##### `mkfs_options` unique for each filesystem.
+Options to pass to mkfs at creation time.
 
+Filesystem Backing Options
+==========================
 
+##### `size` 10000 (`file`) or 10%VG|10g (`vg`)
+The size, only used for filesystems backed by `vg` and `file` storage. If vg then a number suffixied by the scale [g|m|t|p], if a file then just a number [megabytes].
+##### `sparse` Boolean (default: true)
+Sparse file creation, used by the `file` storage, by default we use this for speed, but you may not want that.
+##### `stripes` optional.
+The stripes, only used for filesystems backed by `vg` aka LVM storage.
+##### `mirrors` optional.
+The mirrors, only used for filesystems backed by `vg` aka LVM storage. 
+
+Filesystem Mounting Options
+===========================
+
+##### `mount` /path/to/mount
+Path to mount the filesystem. (If present we will mount the filesystem - this is rather important)
+##### `options` rw,noatime,defaults (default: defaults)
+Options to mount with and add to the fstab.
+##### `dump` 0|1|2 (default: 0)
+Dump entry for fstab
+##### `pass` 0|1|2 (default: 0)
+Pass entry for fstab
+##### `user` name
+Owner of the mountpoint, otherwise we use the chef default. We will not try to create users. You should use the users cookbook for that.
+##### `group` name
+Group of the mountpoint, otherwise we use the chef default. We will not try to create groups. You should write a cookbook to make them nicely.
+##### `mode` 775
+Mode of the mountpoint, otherwise we use the chef default.
+
+Package and Recipe Options
+==========================
+
+##### `package` Package name to install, if specified.
+Used to support the filesystem
+##### `recipe` Recipe to run, if specified - for future use, not currently supported from the lwrp.
+Used to support the filesystem
+
+Atypical Behaviour Modifiers
+============================
+
+##### `force` Boolean (default: false)
+Set to true we unsafely create filesystems even if they already exist. If there is data it will be lost. Should not use this unless you are quite confident.
+##### `nomkfs` Boolean (default: false)
+Set to true to disable creation of the filesystem.
+##### `nomount` Boolean (default: false)
+Set to true to disable mounting of the filesystem.
+##### `noenable` Boolean (default: false)
+Set to true to disable adding to fstab.
+
+Usage
+=====
+
+````JSON
+{
+ "filesystems": { 
+   "testfs1": {
+     "device": "/dev/sdb",
+     "mount": "/db",
+     "fstype", "xfs",
+     "optons": "noatime,nobarrier",
+     "mkfs_options": "-d sunit=128,swidth=2048"
+   },
+   "applv1": {
+     "mount": "/logical1",
+     "fstype", "ext4",
+     "vg": "standardvg",
+     "size": "20G"
+   },
+   "cluster_01": {
+     "fstype": "ocfs2",
+     "device": "/dev/mpath/ocfs01",
+     "mount": "/mnt/test"
+    },
+   "filebacked": {
+     "file": "/mnt/filesystem-on-a-filesystem.file",
+     "mount": "/mnt/filesystem-on-a-filesystem",
+     "modfstab": "false",
+     "size": "20000"
+    }
+  }
+}
+````
+
+Authors
+=======
+
+* Alex Trull <cookbooks.atrullmdsol@trull.org>
+* Jesse Nelson <spheromak@gmail.com> source of the original cookbook.

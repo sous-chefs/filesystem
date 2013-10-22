@@ -1,0 +1,62 @@
+{
+    "filesystems": {
+        "mnt": {
+            "device": "/dev/xvdb",
+            "fstype": "ext3",
+            "mount": "/mnt",
+            "user": "root",
+            "group": "root",
+            "nomkfs": true
+        },
+        "lvmbar1": {
+            "vg": "foo",
+            "fstype": "xfs",
+            "mount": "/mnt/filesystems-testing/lvm-vg-foo-lv-lvmbar1",
+            "options": "noatime,nobarrier",
+            "mkfs_options": "-d sunit=128,swidth=2048",
+            "size": "10%VG"
+        },
+        "lvmbar2": {
+            "vg": "foo",
+            "fstype": "ext2",
+            "mount": "/mnt/filesystems-testing/lvm-vg-foo-lv-lvmbar2",
+            "size": "10%VG",
+            "stripes": 2
+        },
+        "lvmbar3": {
+            "vg": "foo",
+            "fstype": "ext4",
+            "mount": "/mnt/filesystems-testing/lvm-vg-foo-lv-lvmbar3",
+            "size": "10%VG",
+            "stripes": 2,
+            "mirrors": 2
+        },
+        "nobody777": {
+            "file": "/mnt/filesystems-testing/nobody777.file",
+            "device": "/dev/loop0",
+            "mount": "/mnt/filesystems-testing/nobody777",
+            "user": "nobody",
+            "group": "nogroup",
+            "mode": "777",
+            "noenable": true,
+            "size": "1000"
+        },
+        "sparsefalse": {
+            "file": "/mnt/filesystems-testing/sparsefalse.file",
+            "device": "/dev/loop1",
+            "package": "e2fsprogs,e2fslibs",
+            "mount": "/mnt/filesystems-testing/sparsefalse",
+            "noenable": true,
+            "sparse": false,
+            "size": "1000"
+        },
+        "btrfs": {
+            "fstype": "btrfs",
+            "file": "/mnt/filesystems-testing/btrfs.file",
+            "device": "/dev/loop2",
+            "mount": "/mnt/filesystems-testing/btrfs",
+            "noenable": true,
+            "size": "1000"
+        }
+    }
+}
