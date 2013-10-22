@@ -137,7 +137,6 @@ Keyed filesystem creation:
      "file": "/mnt/filesystem-on-a-filesystem.file",
      "device": "/dev/loop7",
      "mount": "/mnt/filesystem-on-a-filesystem",
-     "modfstab": "false",
      "size": "20000"
     }
   }
