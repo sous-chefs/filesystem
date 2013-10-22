@@ -10,11 +10,11 @@ This cookbook supports four main types of block devices:
 * LVM Volume Groups `vg` - found on systems using LVM.
 * file-backed `file` - created dynamically and looped back - will not come up on reboot, but we will try to remount existing `file` storage in chef.
 
-We will try to create filesystems in two ways: through keys found in node data, or by being called directly with the `filesystems_create` provider. See the example recipe.
+We will try to create filesystems in two ways: through keys found in node data under 'filesystems' or by being called directly with the `filesystem` default provider. See the example recipe.
 
 You can also use your own key for a list of filesystems, see the example recipe for an example of this option.
 
-Tools have been listed in the following attribute key : filesystems_tools. This allows for extending the support to other/new filesystems.
+Tools have been listed in the following attribute key : filesystem_tools. This allows for extending the support to other/new filesystems.
 
 Requirements
 ============
@@ -27,7 +27,7 @@ Main Attributes
 ===============
 
 ##### `filesystems` 
-Hash of filesytems to setup
+Hash of filesytems to setup - this is called filesystems because filesystem is already created/managed by ohai (i.e. no s on the end).
 ##### `node[:filesystems]` keys:
 Each filesytem's key is the FS `label`: This explains each key in a filesystems entry. The label must not exceed 12 characters.
 
@@ -130,6 +130,7 @@ Keyed filesystem creation:
    },
    "cluster_01": {
      "fstype": "ocfs2",
+     "package": "ocfs2-tools",
      "device": "/dev/mpath/ocfs01",
      "mount": "/mnt/test"
     },
@@ -146,7 +147,7 @@ Keyed filesystem creation:
 Direct LWRP'd creation:
 
 ````RUBY
-filesystems_create "fslabel" do
+filesystem "label" do
   fstype "ext3"
   device "/dev/sdb1"
   mount "/mnt/littlelabel"

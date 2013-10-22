@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: filesystems
+# Cookbook Name:: filesystem
 # Resource:: filebacked
 #
 # Copyright 2013 Alex Trull

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: filesystems
+# Cookbook Name:: filesystem
 # Recipe:: example
 #
 # Copyright 2013 Alex Trull
@@ -25,7 +25,7 @@ include_recipe "lvm"
 include_recipe "xfs"
 
 # If we have contents at the default location, we try to make the filesystems with the LWRP.
-filesystems_make_all_from_key "filesystems" do
+filesystem_create_all_from_key "filesystems" do
   action :create
   not_if ( node[:filesystems] == nil || node[:filesystems].empty? )
 end
@@ -35,14 +35,14 @@ end
 # But there are always ways to do non-defaulty things
 
 # If we have contents at a different location we try and make all those other filesystems to.
-filesystems_make_all_from_key "mylittlefilesystems" do
+filesystem_create_all_from_key "mylittlefilesystems" do
   action :create
   not_if ( node[:mylittlefilesystems] == nil || node[:mylittlefilesystems].empty? )
 end
 
-# Or we can call the creation of a filesystem directly with the filesystems_create LWRP
+# Or we can call the creation of a filesystem directly with the filesystem default LWRP
 
-filesystems_create "littlelabel" do
+filesystem "littlelabel" do
   fstype "ext3"
   device "/dev/sdb1"
   mount "/mnt/littlelabel"

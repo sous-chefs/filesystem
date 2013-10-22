@@ -1,8 +1,8 @@
 #
 # Cookbook Name:: filesystem
-# Recipe:: default
+# Resource:: create_all_from_key
 #
-# Copyright 2013 Alex Trull 
+# Copyright 2013 Alex Trull
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,12 +17,16 @@
 # limitations under the License.
 #
 
-# We want to support LVM and xfs
-include_recipe "lvm"
-include_recipe "xfs"
+# We default to creating all filesystems found in the key
+actions :create
+default_action :create
 
-# If we have contents at the default location, we try to make the filesystems with the LWRP.
-filesystem_create_all_from_key "filesystems" do
-  action :create
-  not_if ( node[:filesystems] == nil || node[:filesystems].empty? )
+# The name attribute is the key of the filesystems. 
+attribute :name, :kind_of => String, :name_attribute => true, :default => "filesystems"
+
+# default action is :create
+def initialize(*args)
+  super
+  @action = :create
 end
+
