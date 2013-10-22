@@ -116,13 +116,13 @@ Usage
    "testfs1": {
      "device": "/dev/sdb",
      "mount": "/db",
-     "fstype", "xfs",
+     "fstype": "xfs",
      "optons": "noatime,nobarrier",
      "mkfs_options": "-d sunit=128,swidth=2048"
    },
    "applv1": {
      "mount": "/logical1",
-     "fstype", "ext4",
+     "fstype": "ext4",
      "vg": "standardvg",
      "size": "20G"
    },
