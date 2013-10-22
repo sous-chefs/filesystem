@@ -42,7 +42,7 @@ action :create do
     end
 
     # We pick the file creation method
-    if sparse == true
+    if sparse
       # We default to speedy file creation.
       file_creation_cmd = "dd bs=1M count=0 seek=#{size} of=\"#{file}\""
     else
