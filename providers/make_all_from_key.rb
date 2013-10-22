@@ -37,7 +37,7 @@ action :create do
       force fs["force"] if fs["force"]
       # We may not want to do the default action
       if ( fs["mount"] && fs["nomount"] )
-        # We are not mounting the fs, but we do enable it's fstab entry.
+        # We are not mounting the fs, but we do enable its fstab entry.
         action [:create, :enable]
       elsif ( fs["mount"] && fs["noenable"] )
         # We we not enable the fs in fstab, but we do mount it.
