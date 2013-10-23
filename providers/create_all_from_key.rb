@@ -20,7 +20,7 @@
 action :create do
 
   # Our key is the new resource name or if not we go with filesystems
-  key = @new_resource.name || filesystems
+  key = @new_resource.name || "filesystems"
   
   # We get our filesystems from the key in node data
   filesystems_to_be_created = node[key]
@@ -28,7 +28,7 @@ action :create do
   # For reach filesystem we want to make, we enter the main creation loop of calling the default filesystem provider.
   filesystems_to_be_created.each_key do |label|
 
-    fs = filesystems[label]
+    fs = filesystems_to_be_created[label]
 
     # We pass all possible options to the lwrp that creates, enables and mounts filesystems.
     filesystem label do

@@ -41,10 +41,23 @@ filesystem_create_all_from_key "mylittlefilesystems" do
 end
 
 # Or we can call the creation of a filesystem directly with the filesystem default LWRP
-
 filesystem "littlelabel" do
   fstype "ext3"
   device "/dev/sdb1"
   mount "/mnt/littlelabel"
+  actions [:create, :enable, :mount]
+end
+
+# Or how in combination with the mdadm provider ?
+mdadm "/dev/sd0" do
+  devices [ "/dev/s1", "/dev/s2", "/dev/s3", "/dev/s4" ]
+  level 5
+  action :create
+end
+
+filesystem "raid" do
+  fstype "ext4"
+  device "/dev/sd0"
+  mount "/mnt/raid"
   actions [:create, :enable, :mount]
 end
