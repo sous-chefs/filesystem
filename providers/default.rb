@@ -80,8 +80,8 @@ action :create do
 
   end
 
-  # We only try and create a filesystem if the device is not mounted.
-  unless is_mounted?(device)
+  # We only try and create a filesystem if the device exist both existent and unmounted
+  if ( ::File.exists?(device) ) && ( !is_mounted?(device) )
 
     # We use this check to test if a device's filesystem is already mountable.
     generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
