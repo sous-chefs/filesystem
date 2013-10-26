@@ -48,7 +48,7 @@ filesystem "littlelabel" do
   actions [:create, :enable, :mount]
 end
 
-# Or how in combination with the mdadm provider ?
+# Or what about in combination with the mdadm provider ?
 mdadm "/dev/sd0" do
   devices [ "/dev/s1", "/dev/s2", "/dev/s3", "/dev/s4" ]
   level 5
