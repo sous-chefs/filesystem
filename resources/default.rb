@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: filesystems
-# Resource:: create
+# Cookbook Name:: filesystem
+# Resource:: default
 #
 # Copyright 2013 Alex Trull
 #
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-# Our filesystems_create provider creates filesystems, and can also mount and enable them.
+# Our filesystem provider creates filesystems and can also mount/enable them.
 actions :create, :enable, :mount
 default_action :create
 
@@ -37,7 +37,7 @@ attribute :mkfs_options, :kind_of => String, :default => ""
 attribute :package, :kind_of => String
 attribute :recipe, :kind_of => String
 
-# LVM and filesystem-backed
+# LVM and filebacked
 attribute :sparse, :kind_of => [ TrueClass, FalseClass ], :default => true
 attribute :size, :kind_of => String
 attribute :stripes, :kind_of => Fixnum

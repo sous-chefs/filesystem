@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: filesystems
+# Cookbook Name:: filesystem
 # Attributes:: default
 #
 # Copyright 2013 Alex Trull 
@@ -21,10 +21,10 @@
 default[:filesystems] = Hash.new
 
 # These are used to provide sensible default recipes and packages for installing tools for supporting filesystems.
-# The format is [:filesystems_tools][:fstype][:package|recipe] = "package1,package2"
-default[:filesystems_tools][:ext2][:package] = "e2fsprogs"
-default[:filesystems_tools][:ext3][:package] = "e2fsprogs"
-default[:filesystems_tools][:ext4][:package] = "e2fsprogs"
-default[:filesystems_tools][:xfs][:recipe] = "xfs"
-default[:filesystems_tools][:xfs][:package] = "xfsprogs"
-default[:filesystems_tools][:btrfs][:package] = "btrfs-tools"
+# The format is [:filesystem_tools][:fstype][:package|recipe] = "package1,package2"
+default[:filesystem_tools][:ext2][:package] = "e2fsprogs"
+default[:filesystem_tools][:ext3][:package] = "e2fsprogs"
+default[:filesystem_tools][:ext4][:package] = "e2fsprogs"
+default[:filesystem_tools][:xfs][:recipe] = "xfs" # in the hope we support recipes from within lwprs one day.
+default[:filesystem_tools][:xfs][:package] = "xfsprogs"
+default[:filesystem_tools][:btrfs][:package] = "btrfs-tools"

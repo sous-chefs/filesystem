@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: filesystems
-# Provider:: make_all_from_key
+# Cookbook Name:: filesystem
+# Provider:: create_all_from_key
 #
 # Copyright 2013 Alex Trull
 #
@@ -19,24 +19,24 @@
 
 action :create do
 
-  # Our key is the new resource name
-  key = @new_resource.name
+  # Our key is the new resource name or if not we go with filesystems
+  key = @new_resource.name || "filesystems"
   
   # We get our filesystems from the key in node data
-  filesystems = node[key]
+  filesystems_to_be_created = node[key]
 
-  # For reach filesystem we want to make, we enter the main creation loop
-  filesystems.each_key do |label|
+  # For reach filesystem we want to make, we enter the main creation loop of calling the default filesystem provider.
+  filesystems_to_be_created.each_key do |label|
 
-    fs = filesystems[label]
+    fs = filesystems_to_be_created[label]
 
     # We pass all possible options to the lwrp that creates, enables and mounts filesystems.
-    filesystems_create label do
+    filesystem label do
 
       label fs["label"] if fs["label"]
       device fs["device"] if fs["device"]
       vg fs["vg"] if fs["vg"]
-      file fs["file"] if ["file"]
+      file fs["file"] if fs["file"]
       uuid fs["uuid"] if fs["uuid"]
       fstype fs["fstype"] if fs["fstype"]
       mkfs_options fs["mkfs_options"] if fs["mkfs_options"]

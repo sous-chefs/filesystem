@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: filesystems
-# Resource:: make_all_from_key
+# Cookbook Name:: filesystem
+# Resource:: create_all_from_key
 #
 # Copyright 2013 Alex Trull
 #

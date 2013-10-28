@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: filesystems
+# Cookbook Name:: filesystem
 # Recipe:: default
 #
 # Copyright 2013 Alex Trull 
@@ -22,7 +22,7 @@ include_recipe "lvm"
 include_recipe "xfs"
 
 # If we have contents at the default location, we try to make the filesystems with the LWRP.
-filesystems_make_all_from_key "filesystems" do
+filesystem_create_all_from_key "filesystems" do
   action :create
   not_if ( node[:filesystems] == nil || node[:filesystems].empty? )
 end

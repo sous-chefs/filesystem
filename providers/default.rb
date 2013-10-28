@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: filesystems
+# Cookbook Name:: filesystem
 # Provider:: create
 #
 # Copyright 2013 Alex Trull
@@ -71,7 +71,7 @@ action :create do
     # File-backed
     if file
       # We use the local filebackend provider, to which we feed some variables including the loopback device we want.
-      filesystems_filebacked file do
+      filesystem_filebacked file do
         device device
         size size
         sparse sparse
@@ -80,14 +80,14 @@ action :create do
 
   end
 
-  # We only try and create a filesystem if the device is not mounted.
-  unless is_mounted?(device)
+  # We only try and create a filesystem if the device is existent and unmounted
+  if ( ::File.exists?(device) ) && ( !is_mounted?(device) )
 
     # We use this check to test if a device's filesystem is already mountable.
     generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
 
     # Install the filesystem's default package and recipes as configured in default attributes.
-    fs_tools = node[:filesystems_tools][fstype]
+    fs_tools = node[:filesystem_tools][fstype]
     # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
     # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
     if fs_tools['package']
