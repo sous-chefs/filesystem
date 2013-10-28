@@ -80,7 +80,7 @@ action :create do
 
   end
 
-  # We only try and create a filesystem if the device exist both existent and unmounted
+  # We only try and create a filesystem if the device is existent and unmounted
   if ( ::File.exists?(device) ) && ( !is_mounted?(device) )
 
     # We use this check to test if a device's filesystem is already mountable.
