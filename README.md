@@ -155,6 +155,12 @@ filesystem "label" do
 end
 ````
 
+Links
+=====
+
+Development is at https://github.com/atrullmdsol/filesystem_cookbook
+Opscode community page is at http://community.opscode.com/cookbooks/filesystem
+
 Authors
 =======
 
