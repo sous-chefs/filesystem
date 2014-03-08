@@ -4,7 +4,7 @@ require 'chef/mixin/shell_out'
 module Filesystem
   include Chef::Mixin::ShellOut
 
-  MOUNT_EX_FAIL = 32
+  MOUNT_EX_FAIL = 32 unless const_defined?(:MOUNT_EX_FAIL)
 
   # Check to determine if the device is mounted.
   def is_mounted?(device)
