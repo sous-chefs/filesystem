@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+use_inline_resources
+
 include Filesystem
 
 action :create do
