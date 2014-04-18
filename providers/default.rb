@@ -107,8 +107,10 @@ action :create do
 
     log "filesystem #{label} creating #{fstype} on #{device}"
 
+    force_option = force ? '-f' : ''
+
     # We form our mkfs command
-    mkfs_cmd = "mkfs -t #{fstype} #{mkfs_options} -L #{label} #{device}"
+    mkfs_cmd = "mkfs -t #{fstype} #{force_option} #{mkfs_options} -L #{label} #{device}"
   
     if force
  
