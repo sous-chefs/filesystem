@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+use_inline_resources
+
+include Filesystem
+
 action :create do
 
   label = @new_resource.label || @new_resource.name
@@ -228,4 +232,39 @@ action :mount do
 
   end
 
+end
+
+action :freeze do
+
+  mount = @new_resource.mount
+
+  if mount
+
+    execute "fsfreeze --freeze #{mount}" do
+      not_if { is_frozen?(mount) }
+    end
+
+  else
+
+    raise "mount not specified"
+
+  end
+
+end
+
+action :unfreeze do
+
+  mount = @new_resource.mount
+
+  if mount
+
+    execute "fsfreeze --unfreeze #{mount}" do
+      only_if { is_frozen?(mount) }
+    end
+
+  else
+
+    raise "mount not specified"
+
+  end
 end
