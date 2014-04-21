@@ -151,7 +151,7 @@ filesystem "label" do
   fstype "ext3"
   device "/dev/sdb1"
   mount "/mnt/littlelabel"
-  actions [:create, :enable, :mount]
+  action [:create, :enable, :mount]
 end
 ````
 
