@@ -11,7 +11,7 @@ version          "0.8.3"
 end
 
 depends 'xfs'
-depends 'lvm', '~> 1.0.0'
+depends 'lvm', '~> 1.1.0'
 
 attribute'node[:filesystems]',
   :description => "Filesystems to be created and/or mounted",
