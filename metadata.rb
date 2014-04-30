@@ -13,7 +13,7 @@ end
 depends 'xfs'
 depends 'lvm', '~> 1.1.0'
 
-attribute'node[:filesystems]',
+attribute 'filesystems',
   :description => "Filesystems to be created and/or mounted",
   :type => "hash",
   :required => "recommended"
