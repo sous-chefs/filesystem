@@ -19,7 +19,6 @@ Tools have been listed in the following attribute key : filesystem_tools. This a
 Requirements
 ============
 
-* xfs cookbook when building xfs filesystems - note that on RHEL we need the epel repo (or yum-epel) loaded beforehand to get xfsprogs.
 * lvm cookbook when creating logical volumes
 * package #{fstype}progs to support your chosen fstype. We provide some defaults, too.
 
@@ -52,7 +51,7 @@ If none of these are present then we try to find a device at the label itself.
 Filesystem Creation Options
 ===========================
 
-##### `fstype` [xfs|ocfs2|ext3|ext4|etc] (default: ext3)
+##### `fstype` [ocfs2|ext3|ext4|etc] (default: ext3)
 The type of filesystem to be created.
 ##### `mkfs_options` unique for each filesystem.
 Options to pass to mkfs at creation time.

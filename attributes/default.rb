@@ -25,6 +25,5 @@ default[:filesystems] = Hash.new
 default[:filesystem_tools][:ext2][:package] = "e2fsprogs"
 default[:filesystem_tools][:ext3][:package] = "e2fsprogs"
 default[:filesystem_tools][:ext4][:package] = "e2fsprogs"
-default[:filesystem_tools][:xfs][:recipe] = "xfs" # in the hope we support recipes from within lwprs one day.
 default[:filesystem_tools][:xfs][:package] = "xfsprogs"
 default[:filesystem_tools][:btrfs][:package] = "btrfs-tools"
