@@ -19,7 +19,7 @@ Tools have been listed in the following attribute key : filesystem_tools. This a
 Requirements
 ============
 
-* xfs cookbook when building xfs filesystems
+* xfs cookbook when building xfs filesystems - note that on RHEL we need the epel repo (or yum-epel) loaded beforehand to get xfsprogs.
 * lvm cookbook when creating logical volumes
 * package #{fstype}progs to support your chosen fstype. We provide some defaults, too.
 
