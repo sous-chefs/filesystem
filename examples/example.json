@@ -44,7 +44,7 @@
         "sparsefalse": {
             "file": "/mnt/filesystems-testing/sparsefalse.file",
             "device": "/dev/loop1",
-            "package": "e2fsprogs,e2fslibs",
+            "package": "e2fsprogs",
             "mount": "/mnt/filesystems-testing/sparsefalse",
             "noenable": true,
             "sparse": false,
