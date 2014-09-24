@@ -84,8 +84,16 @@ action :create do
 
   end
 
+  ruby_block 'wait for device' do
+    block do
+      until ::File.exists?(device) do
+        sleep 0.3
+      end
+    end
+  end
+
   # We only try and create a filesystem if the device is existent and unmounted
-  if ( ::File.exists?(device) ) && ( !is_mounted?(device) )
+  if !is_mounted?(device)
 
     # We use this check to test if a device's filesystem is already mountable.
     generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
