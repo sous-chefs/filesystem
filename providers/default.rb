@@ -164,6 +164,7 @@ action :enable do
   pass = @new_resource.pass
   dump = @new_resource.dump
   options = @new_resource.options
+  file = @new_resource.file
 
   if mount
 
@@ -175,10 +176,17 @@ action :enable do
       mode mode if mode
     end
 
+    # Substitute the device with the file when in loopback mode.
+    # This should allow the mount to come back up on reboot.
+    device_or_file = device
+    if file && device.start_with?('/dev/loop')
+      device_or_file = file
+      options = [options, "loop=#{device}"].compact.join(',')
+    end
+
     # Mount using the chef resource
     mount mount do
-      device device
-      fstype fstype
+      device device_or_file
       pass pass
       dump dump
       options options
