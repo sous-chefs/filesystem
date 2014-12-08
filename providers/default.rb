@@ -19,7 +19,7 @@
 
 use_inline_resources
 
-include Filesystem
+include FilesystemMod
 
 action :create do
 

@@ -1,7 +1,7 @@
 require 'pathname'
 require 'chef/mixin/shell_out'
 
-module Filesystem
+module FilesystemMod
   include Chef::Mixin::ShellOut
 
   MOUNT_EX_FAIL = 32 unless const_defined?(:MOUNT_EX_FAIL)
