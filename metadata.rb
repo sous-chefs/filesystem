@@ -10,7 +10,7 @@ version          "0.9.0"
   supports os
 end
 
-depends 'lvm', '~> 1.1.0'
+depends 'lvm', '~> 1.1'
 
 attribute 'filesystems',
   :description => "Filesystems to be created and/or mounted",
