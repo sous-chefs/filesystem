@@ -8,7 +8,7 @@ This cookbook supports four main types of block devices:
 * normal `device` - drives, ssds, volumes presented by HBAs etc
 * device ID `uuid` - mostly found on drives / known block IDs.
 * LVM Volume Groups `vg` - found on systems using LVM.
-* file-backed `file` - created dynamically and looped back - will not come up on reboot, but we will try to remount existing `file` storage in chef.
+* file-backed `file` - created dynamically and looped back.
 
 We will try to create filesystems in two ways: through keys found in node data under 'filesystems' or by being called directly with the `filesystem` default provider. See the example recipe.
 
