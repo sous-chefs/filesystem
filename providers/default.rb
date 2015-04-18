@@ -197,6 +197,7 @@ action :enable do
       device device_or_file
       pass pass
       dump dump
+      fstype fstype
       options options
       action :enable
       only_if "test -b #{device}"

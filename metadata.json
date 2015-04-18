@@ -1,0 +1,58 @@
+{
+  "name": "filesystem",
+  "description": "Installs/Configures various filesystems",
+  "long_description": "Description\n===========\n\nThis cookbook exists to generically define and create block device filesystems with the minimum of inputs.\n\nThis cookbook supports four main types of block devices:\n\n* normal `device` - drives, ssds, volumes presented by HBAs etc\n* device ID `uuid` - mostly found on drives / known block IDs.\n* LVM Volume Groups `vg` - found on systems using LVM.\n* file-backed `file` - created dynamically and looped back.\n\nWe will try to create filesystems in two ways: through keys found in node data under 'filesystems' or by being called directly with the `filesystem` default provider. See the example recipe.\n\nYou can also use your own key for a list of filesystems, see the example recipe for an example of this option.\n\nTools have been listed in the following attribute key : filesystem_tools. This allows for extending the support to other/new filesystems.\n\nRequirements\n============\n\n* lvm cookbook when creating logical volumes\n* package #{fstype}progs to support your chosen fstype. We provide some defaults, too.\n\nMain Attributes\n===============\n\n##### `filesystems` \nHash of filesytems to setup - this is called filesystems because filesystem is already created/managed by ohai (i.e. no s on the end).\n##### `node[:filesystems]` keys:\nEach filesytem's key is the FS `label`: This explains each key in a filesystems entry. The label must not exceed 12 characters.\n\nWe also let you use your own top-level key if you want - see the default recipe and example recipe.\n\nFilesystem Backing Location keys\n================================\n\n##### `device`\nPath to the device to create the filesystem upon.\n##### `uuid`\nUUID of the device to create the filesystem upon.\n##### `file`\nPath to the file-backed storage to be used for a loopback device. `device` must also be present to specify the loopback. If the `file` is not present it will be created, as long as a size is given.\n##### `vg`\nName of the LVM volume group use as backing store for a logical volume. If not present it will be created, as long as a size is given.\n\nEach filesystem should be given one of these attributes for it to have a location to be created at. \n\nIf none of these are present then we try to find a device at the label itself.\n\nFilesystem Creation Options\n===========================\n\n##### `fstype` [ocfs2|ext3|ext4|etc] (default: ext3)\nThe type of filesystem to be created.\n##### `mkfs_options` unique for each filesystem.\nOptions to pass to mkfs at creation time.\n\nFilesystem Backing Options\n==========================\n\n##### `size` 10000 (`file`) or 10%VG|10g (`vg`)\nThe size, only used for filesystems backed by `vg` and `file` storage. If vg then a number suffixied by the scale [g|m|t|p], if a file then just a number [megabytes].\n##### `sparse` Boolean (default: true)\nSparse file creation, used by the `file` storage, by default we use this for speed, but you may not want that.\n##### `stripes` optional.\nThe stripes, only used for filesystems backed by `vg` aka LVM storage.\n##### `mirrors` optional.\nThe mirrors, only used for filesystems backed by `vg` aka LVM storage. \n\nFilesystem Mounting Options\n===========================\n\n##### `mount` /path/to/mount\nPath to mount the filesystem. (If present we will mount the filesystem - this is rather important)\n##### `options` rw,noatime,defaults (default: defaults)\nOptions to mount with and add to the fstab.\n##### `dump` 0|1|2 (default: 0)\nDump entry for fstab\n##### `pass` 0|1|2 (default: 0)\nPass entry for fstab\n##### `user` name\nOwner of the mountpoint, otherwise we use the chef default. We will not try to create users. You should use the users cookbook for that.\n##### `group` name\nGroup of the mountpoint, otherwise we use the chef default. We will not try to create groups. You should write a cookbook to make them nicely.\n##### `mode` 775\nMode of the mountpoint, otherwise we use the chef default.\n\nPackage and Recipe Options\n==========================\n\n##### `package` Package name to install, if specified.\nUsed to support the filesystem\n##### `recipe` Recipe to run, if specified - for future use, not currently supported from the lwrp.\nUsed to support the filesystem\n\nAtypical Behaviour Modifiers\n============================\n\n##### `force` Boolean (default: false)\nSet to true we unsafely create filesystems even if they already exist. If there is data it will be lost. Should not use this unless you are quite confident.\n##### `nomkfs` Boolean (default: false)\nSet to true to disable creation of the filesystem.\n##### `nomount` Boolean (default: false)\nSet to true to disable mounting of the filesystem.\n##### `noenable` Boolean (default: false)\nSet to true to disable adding to fstab.\n\nUsage\n=====\n\nKeyed filesystem creation:\n\n````JSON\n{\n \"filesystems\": { \n   \"testfs1\": {\n     \"device\": \"/dev/sdb\",\n     \"mount\": \"/db\",\n     \"fstype\": \"xfs\",\n     \"optons\": \"noatime,nobarrier\",\n     \"mkfs_options\": \"-d sunit=128,swidth=2048\"\n   },\n   \"applv1\": {\n     \"mount\": \"/logical1\",\n     \"fstype\": \"ext4\",\n     \"vg\": \"standardvg\",\n     \"size\": \"20G\"\n   },\n   \"cluster_01\": {\n     \"fstype\": \"ocfs2\",\n     \"package\": \"ocfs2-tools\",\n     \"device\": \"/dev/mpath/ocfs01\",\n     \"mount\": \"/mnt/test\"\n    },\n   \"filebacked\": {\n     \"file\": \"/mnt/filesystem-on-a-filesystem.file\",\n     \"device\": \"/dev/loop7\",\n     \"mount\": \"/mnt/filesystem-on-a-filesystem\",\n     \"size\": \"20000\"\n    }\n  }\n}\n````\n\nDirect LWRP'd creation:\n\n````RUBY\nfilesystem \"label\" do\n  fstype \"ext3\"\n  device \"/dev/sdb1\"\n  mount \"/mnt/littlelabel\"\n  action [:create, :enable, :mount]\nend\n````\n\nLinks\n=====\n\nDevelopment is at https://github.com/atrullmdsol/filesystem_cookbook\nOpscode community page is at http://community.opscode.com/cookbooks/filesystem\n\nAuthors\n=======\n\n* Alex Trull <cookbooks.atrullmdsol@trull.org>\n* Jesse Nelson <spheromak@gmail.com> source of the original cookbook.\n",
+  "maintainer": "Alex Trull",
+  "maintainer_email": "cookbooks.atrullmdsol@trull.org",
+  "license": "Apache 2.0",
+  "platforms": {
+    "redhat": ">= 0.0.0",
+    "centos": ">= 0.0.0",
+    "xenserver": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0",
+    "debian": ">= 0.0.0",
+    "scientific": ">= 0.0.0",
+    "amazon": ">= 0.0.0"
+  },
+  "dependencies": {
+    "lvm": "~> 1.1"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+    "filesystems": {
+      "description": "Filesystems to be created and/or mounted",
+      "type": "hash",
+      "required": "recommended",
+      "choice": [
+
+      ],
+      "calculated": false,
+      "recipes": [
+
+      ]
+    }
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "0.10.1",
+  "source_url": "",
+  "issues_url": ""
+}
