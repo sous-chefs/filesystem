@@ -4,6 +4,6 @@ DEPENDENCIES
     metadata: true
 
 GRAPH
-  filesystem (0.9.0)
-    lvm (~> 1.1.0)
+  filesystem (0.10.1)
+    lvm (~> 1.1)
   lvm (1.1.0)
