@@ -99,10 +99,10 @@ action :create do
     generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
 
     # Install the filesystem's default package and recipes as configured in default attributes.
-    fs_tools = node[:filesystem_tools][fstype]
+    fs_tools = node[:filesystem_tools].fetch(fstype,nil)
     # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
     # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
-    if fs_tools['package']
+    if fs_tools && fs_tools.fetch('package', false)
       packages = fs_tools['package'].split(',')
       (packages).each {|default_package| package "#{default_package}"}
     end
@@ -123,9 +123,8 @@ action :create do
 
     # We form our mkfs command
     mkfs_cmd = "mkfs -t #{fstype} #{force_option} #{mkfs_options} -L #{label} #{device}"
-  
+
     if force
- 
       # We create the filesystem without any checks, and we ignore failures. This is sparta, etc.
       # It should also be noted that forced behaviour is not default behaviour.
       execute mkfs_cmd do
@@ -140,7 +139,7 @@ action :create do
         not_if generic_check_cmd
       end
 
-    end 
+    end
 
   end
 
