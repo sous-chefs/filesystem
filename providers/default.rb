@@ -45,6 +45,7 @@ action :create do
   pass = @new_resource.pass
   dump = @new_resource.dump
   options = @new_resource.options
+  ignore_existing = @new_resource.ignore_existing
 
   vg = @new_resource.vg
   file = @new_resource.file
@@ -146,10 +147,18 @@ action :create do
     mkfs_cmd = "mkfs -t #{fstype} #{force_option} #{mkfs_options} -L #{label} #{device}"
 
     if force
-      # We create the filesystem without any checks, and we ignore failures. This is sparta, etc.
-      # It should also be noted that forced behaviour is not default behaviour.
+
+      # We force create the filesystem and we ignore failures. This is sparta, etc.
       execute mkfs_cmd do
         ignore_failure true
+        not_if generic_check_cmd
+      end
+
+      # We really will nuke existing filesystems with this one
+      if ignore_existing
+        execute mkfs_cmd do
+          ignore_failure true
+        end
       end
 
     else
