@@ -252,7 +252,7 @@ action :mount do
       group group if group
       mode mode if mode
     end
-    
+
     # Mount using the chef resource
     mount mount do
       device device
@@ -260,6 +260,7 @@ action :mount do
       options options
       action :mount
       only_if "test -b #{device}"
+      not_if "mount | grep #{device}\" \" | grep #{mount}\" \""
     end
 
   end
