@@ -2,7 +2,7 @@
 # Cookbook Name:: filesystem
 # Attributes:: default
 #
-# Copyright 2013 Alex Trull 
+# Copyright 2013 Alex Trull
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,3 +27,9 @@ default[:filesystem_tools][:ext3][:package] = "e2fsprogs"
 default[:filesystem_tools][:ext4][:package] = "e2fsprogs"
 default[:filesystem_tools][:xfs][:package] = "xfsprogs"
 default[:filesystem_tools][:btrfs][:package] = "btrfs-tools"
+# Different filesystems use different force options (stupid I know)
+default[:filesystem_tools][:ext2][:forceopt] = "-F"
+default[:filesystem_tools][:ext3][:forceopt] = "-F"
+default[:filesystem_tools][:ext4][:forceopt] = "-F"
+default[:filesystem_tools][:xfs][:forceopt] = "-f"
+default[:filesystem_tools][:btrfs][:forceopt] = "-f"

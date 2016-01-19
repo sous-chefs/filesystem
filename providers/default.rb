@@ -133,7 +133,14 @@ action :create do
 
     log "filesystem #{label} creating #{fstype} on #{device}"
 
-    force_option = force ? '-f' : ''
+    # Install the filesystem's default package and recipes as configured in default attributes.
+    mkfs_force_options = node[:filesystem_tools].fetch(fstype,nil)
+    # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
+    # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
+    if mkfs_force_options && mkfs_force_options.fetch('forceopt', false)
+      # if force is true, we set the force option. If it isn't set it remains empty.
+      force_option = force ? mkfs_force_options['forceopt'] : ''
+    end
 
     # We form our mkfs command
     mkfs_cmd = "mkfs -t #{fstype} #{force_option} #{mkfs_options} -L #{label} #{device}"
