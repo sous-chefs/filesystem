@@ -1,0 +1,11 @@
+DEPENDENCIES
+  filesystem
+    path: .
+    metadata: true
+
+GRAPH
+  filesystem (0.11.0)
+    lvm (~> 3.1)
+    xfs (>= 0.0.0)
+  lvm (3.1.0)
+  xfs (2.0.1)
