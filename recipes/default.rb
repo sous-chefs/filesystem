@@ -17,9 +17,8 @@
 # limitations under the License.
 #
 
-# We want to support LVM and xfs
+# We want to support LVM
 include_recipe "lvm"
-include_recipe "xfs"
 
 # If we have contents at the default location, we try to make the filesystems with the LWRP.
 filesystem_create_all_from_key "filesystems" do

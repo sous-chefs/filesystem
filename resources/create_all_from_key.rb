@@ -22,7 +22,7 @@ actions :create
 default_action :create
 
 # The name attribute is the key of the filesystems. 
-attribute :name, :kind_of => String, :name_attribute => true, :default => "filesystems"
+attribute :name, :kind_of => String, :name_attribute => true
 
 # default action is :create
 def initialize(*args)

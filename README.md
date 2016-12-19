@@ -8,7 +8,7 @@ This cookbook supports four main types of block devices:
 * normal `device` - drives, ssds, volumes presented by HBAs etc
 * device ID `uuid` - mostly found on drives / known block IDs.
 * LVM Volume Groups `vg` - found on systems using LVM.
-* file-backed `file` - created dynamically and looped back - will not come up on reboot, but we will try to remount existing `file` storage in chef.
+* file-backed `file` - created dynamically and looped back.
 
 We will try to create filesystems in two ways: through keys found in node data under 'filesystems' or by being called directly with the `filesystem` default provider. See the example recipe.
 
@@ -19,14 +19,13 @@ Tools have been listed in the following attribute key : filesystem_tools. This a
 Requirements
 ============
 
-* xfs cookbook when building xfs filesystems
 * lvm cookbook when creating logical volumes
 * package #{fstype}progs to support your chosen fstype. We provide some defaults, too.
 
 Main Attributes
 ===============
 
-##### `filesystems` 
+##### `filesystems`
 Hash of filesytems to setup - this is called filesystems because filesystem is already created/managed by ohai (i.e. no s on the end).
 ##### `node[:filesystems]` keys:
 Each filesytem's key is the FS `label`: This explains each key in a filesystems entry. The label must not exceed 12 characters.
@@ -45,14 +44,14 @@ Path to the file-backed storage to be used for a loopback device. `device` must 
 ##### `vg`
 Name of the LVM volume group use as backing store for a logical volume. If not present it will be created, as long as a size is given.
 
-Each filesystem should be given one of these attributes for it to have a location to be created at. 
+Each filesystem should be given one of these attributes for it to have a location to be created at.
 
 If none of these are present then we try to find a device at the label itself.
 
 Filesystem Creation Options
 ===========================
 
-##### `fstype` [xfs|ocfs2|ext3|ext4|etc] (default: ext3)
+##### `fstype` [ocfs2|ext3|ext4|etc] (default: ext3)
 The type of filesystem to be created.
 ##### `mkfs_options` unique for each filesystem.
 Options to pass to mkfs at creation time.
@@ -67,7 +66,7 @@ Sparse file creation, used by the `file` storage, by default we use this for spe
 ##### `stripes` optional.
 The stripes, only used for filesystems backed by `vg` aka LVM storage.
 ##### `mirrors` optional.
-The mirrors, only used for filesystems backed by `vg` aka LVM storage. 
+The mirrors, only used for filesystems backed by `vg` aka LVM storage.
 
 Filesystem Mounting Options
 ===========================
@@ -99,7 +98,9 @@ Atypical Behaviour Modifiers
 ============================
 
 ##### `force` Boolean (default: false)
-Set to true we unsafely create filesystems even if they already exist. If there is data it will be lost. Should not use this unless you are quite confident.
+Set to true we unsafely create filesystems. If there is data it will be lost. Should not use this unless you are quite confident.
+##### `ignore_existing` Boolean (default: false)
+Set to true we will ignore existing filesystems and recreate them. Double Dangerous and only for unsound behaviour. Use with 'force' true.
 ##### `nomkfs` Boolean (default: false)
 Set to true to disable creation of the filesystem.
 ##### `nomount` Boolean (default: false)
@@ -114,7 +115,7 @@ Keyed filesystem creation:
 
 ````JSON
 {
- "filesystems": { 
+ "filesystems": {
    "testfs1": {
      "device": "/dev/sdb",
      "mount": "/db",

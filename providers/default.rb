@@ -19,7 +19,7 @@
 
 use_inline_resources
 
-include Filesystem
+include FilesystemMod
 
 action :create do
 
@@ -45,6 +45,7 @@ action :create do
   pass = @new_resource.pass
   dump = @new_resource.dump
   options = @new_resource.options
+  ignore_existing = @new_resource.ignore_existing
 
   vg = @new_resource.vg
   file = @new_resource.file
@@ -84,17 +85,39 @@ action :create do
 
   end
 
+  ruby_block 'wait for device' do
+    block do
+      #TODO: does this effect bind mounts ?
+      net_fs_types =%w(nfs cifs smp nbd)
+      if net_fs_types.include? fstype
+        Chef::Log.info "#{fstype} is a netfs will not wait for block device"
+        return
+      end
+
+      count = 0
+      until ::File.exists?(device) do
+        count += 1
+        sleep 0.3
+        Chef::Log.debug "waiting for #{device} to exist, try # #{count}"
+        if count >= 1000
+          #TODO: make this a paramater
+          raise Timeout::Error, "Timeout waiting for device"
+        end
+      end
+    end
+  end
+
   # We only try and create a filesystem if the device is existent and unmounted
-  if ( ::File.exists?(device) ) && ( !is_mounted?(device) )
+  if !is_mounted?(device)
 
     # We use this check to test if a device's filesystem is already mountable.
     generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
 
     # Install the filesystem's default package and recipes as configured in default attributes.
-    fs_tools = node[:filesystem_tools][fstype]
+    fs_tools = node[:filesystem_tools].fetch(fstype,nil)
     # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
     # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
-    if fs_tools['package']
+    if fs_tools && fs_tools.fetch('package', false)
       packages = fs_tools['package'].split(',')
       (packages).each {|default_package| package "#{default_package}"}
     end
@@ -111,17 +134,31 @@ action :create do
 
     log "filesystem #{label} creating #{fstype} on #{device}"
 
-    force_option = force ? '-f' : ''
+    # Install the filesystem's default package and recipes as configured in default attributes.
+    mkfs_force_options = node[:filesystem_tools].fetch(fstype,nil)
+    # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
+    # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
+    if mkfs_force_options && mkfs_force_options.fetch('forceopt', false)
+      # if force is true, we set the force option. If it isn't set it remains empty.
+      force_option = force ? mkfs_force_options['forceopt'] : ''
+    end
 
     # We form our mkfs command
     mkfs_cmd = "mkfs -t #{fstype} #{force_option} #{mkfs_options} -L #{label} #{device}"
-  
+
     if force
- 
-      # We create the filesystem without any checks, and we ignore failures. This is sparta, etc.
-      # It should also be noted that forced behaviour is not default behaviour.
+
+      # We force create the filesystem and we ignore failures. This is sparta, etc.
       execute mkfs_cmd do
         ignore_failure true
+        not_if generic_check_cmd
+      end
+
+      # We really will nuke existing filesystems with this one
+      if ignore_existing
+        execute mkfs_cmd do
+          ignore_failure true
+        end
       end
 
     else
@@ -132,7 +169,7 @@ action :create do
         not_if generic_check_cmd
       end
 
-    end 
+    end
 
   end
 
@@ -164,6 +201,7 @@ action :enable do
   pass = @new_resource.pass
   dump = @new_resource.dump
   options = @new_resource.options
+  file = @new_resource.file
 
   if mount
 
@@ -175,12 +213,20 @@ action :enable do
       mode mode if mode
     end
 
+    # Substitute the device with the file when in loopback mode.
+    # This should allow the mount to come back up on reboot.
+    device_or_file = device
+    if file && device.start_with?('/dev/loop')
+      device_or_file = file
+      options = [options, "loop=#{device}"].compact.join(',')
+    end
+
     # Mount using the chef resource
     mount mount do
-      device device
-      fstype fstype
+      device device_or_file
       pass pass
       dump dump
+      fstype fstype
       options options
       action :enable
       only_if "test -b #{device}"
@@ -222,7 +268,7 @@ action :mount do
       group group if group
       mode mode if mode
     end
-    
+
     # Mount using the chef resource
     mount mount do
       device device
@@ -230,6 +276,7 @@ action :mount do
       options options
       action :mount
       only_if "test -b #{device}"
+      not_if "mount | grep #{device}\" \" | grep #{mount}\" \""
     end
 
   end

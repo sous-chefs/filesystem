@@ -10,7 +10,7 @@
         },
         "lvmbar1": {
             "vg": "foo",
-            "fstype": "xfs",
+            "fstype": "ext3",
             "mount": "/mnt/filesystems-testing/lvm-vg-foo-lv-lvmbar1",
             "options": "noatime,nobarrier",
             "mkfs_options": "-d sunit=128,swidth=2048",
@@ -44,7 +44,7 @@
         "sparsefalse": {
             "file": "/mnt/filesystems-testing/sparsefalse.file",
             "device": "/dev/loop1",
-            "package": "e2fsprogs,e2fslibs",
+            "package": "e2fsprogs",
             "mount": "/mnt/filesystems-testing/sparsefalse",
             "noenable": true,
             "sparse": false,

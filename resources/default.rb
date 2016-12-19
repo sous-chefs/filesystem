@@ -21,7 +21,7 @@
 actions :create, :enable, :mount, :freeze, :unfreeze
 default_action :create
 
-# The name attribute is label of the filesystem. 
+# The name attribute is label of the filesystem.
 attribute :name, :kind_of => String, :name_attribute => true
 attribute :label, :kind_of => String
 
@@ -54,12 +54,13 @@ attribute :mode, :kind_of => String
 attribute :pass, :kind_of => Fixnum, :default => 0, :equal_to => [0, 1, 2]
 attribute :dump, :kind_of => Fixnum, :default => 0, :equal_to => [0, 1, 2]
 
-# We may try and force things, particularly if we expect to find existing filesystems on otherwise unmounted devices.
+# We may try and force things with mkfs, danger...
 attribute :force, :kind_of => [ TrueClass, FalseClass ], :default => false
+# An additional thing to ignore existing filesystems - this will actively lose you data on unmounted filesystems if set.
+attribute :ignore_existing, :kind_of => [ TrueClass, FalseClass ], :default => false
 
 # default action is :create
 def initialize(*args)
   super
   @action = :create
 end
-
