@@ -14,7 +14,7 @@ chef_version '>= 12.0' if respond_to?(:chef_version)
 end
 
 depends 'xfs'
-depends 'lvm', '~> 3.1'
+depends 'lvm', '>= 1.1'
 
 attribute 'filesystems',
   :description => "Filesystems to be created and/or mounted",
