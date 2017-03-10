@@ -23,5 +23,5 @@ include_recipe 'lvm'
 # If we have contents at the default location, we try to make the filesystems with the LWRP.
 filesystem_create_all_from_key 'filesystems' do
   action :create
-  not_if { node[:filesystems].nil? || node[:filesystems].empty? }
+  not_if { node['filesystems'].nil? || node['filesystems'].empty? }
 end

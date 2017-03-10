@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+use_inline_resources
 action :create do
   file = @new_resource.name
   size = @new_resource.size
@@ -33,7 +33,7 @@ action :create do
 
   get_loopback_cmd = "losetup -a | grep #{file} | grep #{device}"
 
-  loopback = `#{get_loopback_cmd}`.gsub(/: \[.*/, '').strip
+  loopback = Mixlib::ShellOut.new(get_loopback_cmd).run_command.gsub(/: \[.*/, '').strip
 
   if ::File.exist?(file) && device == loopback
     # Case 1)

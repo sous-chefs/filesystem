@@ -62,26 +62,27 @@ action :create do
   if (vg || file) && !size.nil?
 
     # LVM
-    if vg
-      # We use the lvm provider directly.
-      lvm_logical_volume label do
-        group vg
-        size size
-        stripes unless stripes.nil?
-        mirrors unless mirrors.nil?
+    # We use the lvm provider directly.
+    lvm_logical_volume label do
+      group vg
+      size size
+      stripes unless stripes.nil?
+      mirrors unless mirrors.nil?
+      not_if do
+        vg.nil?
       end
     end
 
     # File-backed
-    if file
-      # We use the local filebackend provider, to which we feed some variables including the loopback device we want.
-      filesystem_filebacked file do
-        device device
-        size size
-        sparse sparse
+    # We use the local filebackend provider, to which we feed some variables including the loopback device we want.
+    filesystem_filebacked file do
+      device device
+      size size
+      sparse sparse
+      not_if do
+        vg.nil?
       end
     end
-
   end
 
   ruby_block 'wait for device' do
@@ -113,7 +114,7 @@ action :create do
     generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
 
     # Install the filesystem's default package and recipes as configured in default attributes.
-    fs_tools = node[:filesystem_tools].fetch(fstype, nil)
+    fs_tools = node['filesystem_tools'].fetch(fstype, nil)
     # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
     # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
     if fs_tools && fs_tools.fetch('package', false)
@@ -134,7 +135,7 @@ action :create do
     log "filesystem #{label} creating #{fstype} on #{device}"
 
     # Install the filesystem's default package and recipes as configured in default attributes.
-    mkfs_force_options = node[:filesystem_tools].fetch(fstype, nil)
+    mkfs_force_options = node['filesystem_tools'].fetch(fstype, nil)
     # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
     # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
     if mkfs_force_options && mkfs_force_options.fetch('forceopt', false)
@@ -154,9 +155,10 @@ action :create do
       end
 
       # We really will nuke existing filesystems with this one
-      if ignore_existing
-        execute mkfs_cmd do
-          ignore_failure true
+      execute mkfs_cmd do
+        ignore_failure true
+        not_if do
+          ignore_existing.nil?
         end
       end
 

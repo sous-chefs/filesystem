@@ -8,7 +8,7 @@ module FilesystemMod
 
   # Check to determine if the device is mounted.
   def mounted?(device)
-    system("grep -q '#{device}' /proc/mounts")
+    shell_out("grep -q '#{device}' /proc/mounts")
   end
 
   # Check to determine if the mount is frozen.
