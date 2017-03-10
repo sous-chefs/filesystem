@@ -80,7 +80,7 @@ action :create do
       size size
       sparse sparse
       not_if do
-        vg.nil?
+        file.nil?
       end
     end
   end
