@@ -15,8 +15,3 @@ end
 
 depends 'xfs'
 depends 'lvm', '>= 1.1'
-
-attribute 'filesystems',
-  description: 'Filesystems to be created and/or mounted',
-  type: 'hash',
-  required: 'recommended'
