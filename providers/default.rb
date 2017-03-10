@@ -107,7 +107,7 @@ action :create do
   end
 
   # We only try and create a filesystem if the device is existent and unmounted
-  unless is_mounted?(device)
+  unless mounted?(device)
 
     # We use this check to test if a device's filesystem is already mountable.
     generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
@@ -281,31 +281,19 @@ end
 action :freeze do
   mount = @new_resource.mount
 
-  if mount
+  execute "fsfreeze --freeze #{mount}" do
+    not_if { frozen?(mount) }
+  end unless mount.nil?
 
-    execute "fsfreeze --freeze #{mount}" do
-      not_if { is_frozen?(mount) }
-    end
-
-  else
-
-    raise 'mount not specified'
-
-  end
+  raise 'mount not specified' if mount.nil?
 end
 
 action :unfreeze do
   mount = @new_resource.mount
 
-  if mount
+  execute "fsfreeze --unfreeze #{mount}" do
+    only_if { frozen?(mount) }
+  end unless mount.nil?
 
-    execute "fsfreeze --unfreeze #{mount}" do
-      only_if { is_frozen?(mount) }
-    end
-
-  else
-
-    raise 'mount not specified'
-
-  end
+  raise 'mount not specified' if mount.nil?
 end
