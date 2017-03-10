@@ -5,8 +5,8 @@ description      'Installs/Configures various filesystems'
 license          'Apache 2.0'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.11.0'
-source_url       'https://github.com/atrull/filesystem_cookbook'
-issues_url       'https://github.com/atrull/filesystem_cookbook/issues'
+source_url       'https://github.com/sous-chefs/filesystem'
+issues_url       'https://github.com/sous-chefs/filesystem/issues'
 chef_version '>= 12.0' if respond_to?(:chef_version)
 
 %w(redhat centos xenserver ubuntu debian scientific amazon).each do |os|
