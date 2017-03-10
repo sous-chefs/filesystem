@@ -30,15 +30,6 @@ platforms:
       box: bento/ubuntu-16.04
 
 suites:
-- name: package
+- name: default
   run_list:
-    - recipe[test]
-- name: source
-  run_list:
-    - recipe[test]
-  attributes:
-    haproxy:
-      install_method: source
-- name: app_lb
-  run_list:
-    - recipe[haproxy::app_lb]
+    - recipe[filesystem::default]
