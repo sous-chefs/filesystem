@@ -18,18 +18,18 @@
 #
 
 # This is used to create the filesystems themselves, see examples in the README.
-default[:filesystems] = Hash.new
+default[:filesystems] = {}
 
 # These are used to provide sensible default recipes and packages for installing tools for supporting filesystems.
 # The format is [:filesystem_tools][:fstype][:package|recipe] = "package1,package2"
-default[:filesystem_tools][:ext2][:package] = "e2fsprogs"
-default[:filesystem_tools][:ext3][:package] = "e2fsprogs"
-default[:filesystem_tools][:ext4][:package] = "e2fsprogs"
-default[:filesystem_tools][:xfs][:package] = "xfsprogs"
-default[:filesystem_tools][:btrfs][:package] = "btrfs-tools"
+default[:filesystem_tools][:ext2][:package] = 'e2fsprogs'
+default[:filesystem_tools][:ext3][:package] = 'e2fsprogs'
+default[:filesystem_tools][:ext4][:package] = 'e2fsprogs'
+default[:filesystem_tools][:xfs][:package] = 'xfsprogs'
+default[:filesystem_tools][:btrfs][:package] = 'btrfs-tools'
 # Different filesystems use different force options (stupid I know)
-default[:filesystem_tools][:ext2][:forceopt] = "-F"
-default[:filesystem_tools][:ext3][:forceopt] = "-F"
-default[:filesystem_tools][:ext4][:forceopt] = "-F"
-default[:filesystem_tools][:xfs][:forceopt] = "-f"
-default[:filesystem_tools][:btrfs][:forceopt] = "-f"
+default[:filesystem_tools][:ext2][:forceopt] = '-F'
+default[:filesystem_tools][:ext3][:forceopt] = '-F'
+default[:filesystem_tools][:ext4][:forceopt] = '-F'
+default[:filesystem_tools][:xfs][:forceopt] = '-f'
+default[:filesystem_tools][:btrfs][:forceopt] = '-f'

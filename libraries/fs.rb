@@ -13,7 +13,7 @@ module FilesystemMod
 
   # Check to determine if the mount is frozen.
   def is_frozen?(mount)
-    fields = File.readlines('/proc/mounts').map {|line| line.split}.detect {|fields| fields[1] == mount}
+    fields = File.readlines('/proc/mounts').map(&:split).detect { |fields| fields[1] == mount }
     raise "#{mount} not mounted" unless fields
     remount = shell_out('mount', '-o', "remount,#{fields[3]}", mount)
     if remount.exitstatus == MOUNT_EX_FAIL
