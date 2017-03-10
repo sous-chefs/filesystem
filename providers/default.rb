@@ -22,20 +22,19 @@ use_inline_resources
 include FilesystemMod
 
 action :create do
-
   label = @new_resource.label || @new_resource.name
 
-  if @new_resource.file
-    device = @new_resource.device
-  elsif @new_resource.vg
-    device = "/dev/mapper/#{@new_resource.vg}-#{label}"
-  elsif @new_resource.uuid
-    device = "/dev/disk/by-uuid/#{@new_resource.uuid}"
-  elsif @new_resource.device
-    device = @new_resource.device
-  else
-    device = "/dev/mapper/#{label}"
-  end
+  device = if @new_resource.file
+             @new_resource.device
+           elsif @new_resource.vg
+             "/dev/mapper/#{@new_resource.vg}-#{label}"
+           elsif @new_resource.uuid
+             "/dev/disk/by-uuid/#{@new_resource.uuid}"
+           elsif @new_resource.device
+             @new_resource.device
+           else
+             "/dev/mapper/#{label}"
+           end
 
   fstype = @new_resource.fstype
   mkfs_options = @new_resource.mkfs_options
@@ -60,82 +59,83 @@ action :create do
   force = @new_resource.force
 
   # In two cases we may need to idempotently create the storage before creating the filesystem on it: LVM and file-backed.
-  if ( ( vg || file ) && ( size != nil ) )
+  if (vg || file) && !size.nil?
 
     # LVM
-    if vg
-      # We use the lvm provider directly.
-      lvm_logical_volume label do
-        group vg
-        size size
-        stripes if stripes != nil
-        mirrors if mirrors != nil
+    # We use the lvm provider directly.
+    lvm_logical_volume label do
+      group vg
+      size size
+      stripes unless stripes.nil?
+      mirrors unless mirrors.nil?
+      not_if do
+        vg.nil?
       end
     end
 
     # File-backed
-    if file
-      # We use the local filebackend provider, to which we feed some variables including the loopback device we want.
-      filesystem_filebacked file do
-        device device
-        size size
-        sparse sparse
+    # We use the local filebackend provider, to which we feed some variables including the loopback device we want.
+    filesystem_filebacked file do
+      device device
+      size size
+      sparse sparse
+      not_if do
+        file.nil?
       end
     end
-
   end
 
   ruby_block 'wait for device' do
     block do
-      #TODO: does this effect bind mounts ?
-      net_fs_types =%w(nfs cifs smp nbd)
+      # TODO: does this effect bind mounts ?
+      net_fs_types = %w(nfs cifs smp nbd)
       if net_fs_types.include? fstype
         Chef::Log.info "#{fstype} is a netfs will not wait for block device"
         return
       end
 
       count = 0
-      until ::File.exists?(device) do
+      until ::File.exist?(device)
         count += 1
         sleep 0.3
         Chef::Log.debug "waiting for #{device} to exist, try # #{count}"
         if count >= 1000
-          #TODO: make this a paramater
-          raise Timeout::Error, "Timeout waiting for device"
+          # TODO: make this a paramater
+          raise Timeout::Error, 'Timeout waiting for device'
         end
       end
     end
   end
 
   # We only try and create a filesystem if the device is existent and unmounted
-  if !is_mounted?(device)
+  unless mounted?(device)
 
     # We use this check to test if a device's filesystem is already mountable.
     generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
 
     # Install the filesystem's default package and recipes as configured in default attributes.
-    fs_tools = node[:filesystem_tools].fetch(fstype,nil)
+    fs_tools = node['filesystem_tools'].fetch(fstype, nil)
     # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
     # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
     if fs_tools && fs_tools.fetch('package', false)
       packages = fs_tools['package'].split(',')
-      (packages).each {|default_package| package "#{default_package}"}
+      packages.each { |default_package| package default_package.to_s }
     end
 
     # If we were keyed to use specific package or cookbooks we attempt to install those too.
     # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
-    #if recipe
+    # if recipe
     #  (recipe.split(',') || []).each {|keyed_recipe| include_recipe "#{keyed_recipe}"}
-    #end
+    # end
     if package
       packages = @new_resource.package.split(',')
-      (packages).each {|keyed_package| package "#{keyed_package}"}
+      packages.each { |keyed_package| package keyed_package.to_s }
     end
 
     log "filesystem #{label} creating #{fstype} on #{device}"
 
     # Install the filesystem's default package and recipes as configured in default attributes.
-    mkfs_force_options = node[:filesystem_tools].fetch(fstype,nil)
+    mkfs_force_options = node['filesystem_tools'].fetch(fstype, nil)
     # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
     # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
     if mkfs_force_options && mkfs_force_options.fetch('forceopt', false)
@@ -155,9 +155,10 @@ action :create do
       end
 
       # We really will nuke existing filesystems with this one
-      if ignore_existing
-        execute mkfs_cmd do
-          ignore_failure true
+      execute mkfs_cmd do
+        ignore_failure true
+        not_if do
+          ignore_existing.nil?
         end
       end
 
@@ -178,20 +179,19 @@ end
 
 # If we're enabling, we create the fstab entry.
 action :enable do
-
   label = @new_resource.label || @new_resource.name
 
-  if @new_resource.file
-    device = @new_resource.device
-  elsif @new_resource.vg
-    device = "/dev/mapper/#{@new_resource.vg}-#{label}"
-  elsif @new_resource.uuid
-    device = "/dev/disk/by-uuid/#{@new_resource.uuid}"
-  elsif @new_resource.device
-    device = @new_resource.device
-  else
-    device = "/dev/mapper/#{label}"
-  end
+  device = if @new_resource.file
+             @new_resource.device
+           elsif @new_resource.vg
+             "/dev/mapper/#{@new_resource.vg}-#{label}"
+           elsif @new_resource.uuid
+             "/dev/disk/by-uuid/#{@new_resource.uuid}"
+           elsif @new_resource.device
+             @new_resource.device
+           else
+             "/dev/mapper/#{label}"
+           end
 
   mount = @new_resource.mount
   fstype = @new_resource.fstype
@@ -233,25 +233,23 @@ action :enable do
     end
 
   end
-
 end
 
 # If we're mounting, we mount.
 action :mount do
-
   label = @new_resource.label || @new_resource.name
 
-  if @new_resource.file
-    device = @new_resource.device
-  elsif @new_resource.vg
-    device = "/dev/mapper/#{@new_resource.vg}-#{label}"
-  elsif @new_resource.uuid
-    device = "/dev/disk/by-uuid/#{@new_resource.uuid}"
-  elsif @new_resource.device
-    device = @new_resource.device
-  else
-    device = "/dev/mapper/#{label}"
-  end
+  device = if @new_resource.file
+             @new_resource.device
+           elsif @new_resource.vg
+             "/dev/mapper/#{@new_resource.vg}-#{label}"
+           elsif @new_resource.uuid
+             "/dev/disk/by-uuid/#{@new_resource.uuid}"
+           elsif @new_resource.device
+             @new_resource.device
+           else
+             "/dev/mapper/#{label}"
+           end
 
   mount = @new_resource.mount
   fstype = @new_resource.fstype
@@ -280,40 +278,24 @@ action :mount do
     end
 
   end
-
 end
 
 action :freeze do
-
   mount = @new_resource.mount
 
-  if mount
+  execute "fsfreeze --freeze #{mount}" do
+    not_if { frozen?(mount) }
+  end unless mount.nil?
 
-    execute "fsfreeze --freeze #{mount}" do
-      not_if { is_frozen?(mount) }
-    end
-
-  else
-
-    raise "mount not specified"
-
-  end
-
+  raise 'mount not specified' if mount.nil?
 end
 
 action :unfreeze do
-
   mount = @new_resource.mount
 
-  if mount
+  execute "fsfreeze --unfreeze #{mount}" do
+    only_if { frozen?(mount) }
+  end unless mount.nil?
 
-    execute "fsfreeze --unfreeze #{mount}" do
-      only_if { is_frozen?(mount) }
-    end
-
-  else
-
-    raise "mount not specified"
-
-  end
+  raise 'mount not specified' if mount.nil?
 end

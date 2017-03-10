@@ -16,14 +16,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+use_inline_resources
 action :create do
- 
   file = @new_resource.name
   size = @new_resource.size
   sparse = @new_resource.sparse
   device = @new_resource.device
- 
+
   # Idempotent behaviour:
 
   # Case 1) File found, Loopback found => return loopback.
@@ -34,15 +33,15 @@ action :create do
 
   get_loopback_cmd = "losetup -a | grep #{file} | grep #{device}"
 
-  loopback = `#{get_loopback_cmd}`.gsub(/: \[.*/, "").strip
+  loopback = Mixlib::ShellOut.new(get_loopback_cmd).run_command.stdout.gsub(/: \[.*/, '').strip
 
-  if ( ::File.exists?(file) && device == loopback )
+  if ::File.exist?(file) && device == loopback
     # Case 1)
     # File and Loopback found - nothing to do.
 
     log "Device #{loopback} already exists for #{file}"
 
-  elsif ( ::File.exists?(file) && device != loopback )
+  elsif ::File.exist?(file) && device != loopback
     # Case 2)
     # File but no loopback - so we make a loopback
 
@@ -51,7 +50,7 @@ action :create do
       only_if "ls #{file} >/dev/null"
     end
 
-  elsif ( size != nil )
+  elsif !size.nil?
     # Case 3)
     # If we have a size, we can create the file..
 
@@ -61,13 +60,13 @@ action :create do
     end
 
     # We pick the file creation method
-    if sparse
-      # We default to speedy file creation.
-      file_creation_cmd = "dd bs=1M count=0 seek=#{size} of=\"#{file}\""
-    else
-      # If not sparse we use zeros - this takes much longer.
-      file_creation_cmd = "dd bs=1M count=#{size} if=/dev/zero of=\"#{file}\""
-    end
+    file_creation_cmd = if sparse
+                          # We default to speedy file creation.
+                          "dd bs=1M count=0 seek=#{size} of=\"#{file}\""
+                        else
+                          # If not sparse we use zeros - this takes much longer.
+                          "dd bs=1M count=#{size} if=/dev/zero of=\"#{file}\""
+                        end
 
     log "Creating #{file}"
 
@@ -83,5 +82,4 @@ action :create do
     end
 
   end
-
 end
