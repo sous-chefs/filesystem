@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+### Changed
+
+## [0.11.0] - 2017-03-13
 - Added CHANGELOG.md
 - Added CONTRIBUTING.md
 - Removed Berksfile.lock
@@ -13,7 +16,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added Delivery
 - Added Travis
 - Added Test-Kitchen, Kitchen-dokken
-### Changed
 - updated Berksfile to supermarket
 - updated lvm >= 1.1
 - updated to sous-chefs
@@ -26,6 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-[Unreleased]: https://github.com/sous-chefs/filesystem/compare/v0.10.6...HEAD
+[Unreleased]: https://github.com/sous-chefs/filesystem/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/sous-chefs/filesystem/compare/v0.10.6...v0.11.0
 [0.10.6]: https://github.com/sous-chefs/filesystem/compare/v0.10.2...v0.10.6
 [0.10.2]: https://github.com/sous-chefs/filesystem/compare/v0.8.2...v0.10.2
