@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: filesystem
+# Cookbook:: filesystem
 # Resource:: create_all_from_key
 #
-# Copyright 2013 Alex Trull
+# Copyright:: 2013-2017, Alex Trull
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,9 +23,3 @@ default_action :create
 
 # The name attribute is the key of the filesystems.
 attribute :name, kind_of: String, name_attribute: true
-
-# default action is :create
-def initialize(*args)
-  super
-  @action = :create
-end

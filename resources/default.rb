@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: filesystem
+# Cookbook:: filesystem
 # Resource:: default
 #
-# Copyright 2013 Alex Trull
+# Copyright:: 2013-2017, Alex Trull
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -58,9 +58,3 @@ attribute :dump, kind_of: Integer, default: 0, equal_to: [0, 1, 2]
 attribute :force, kind_of: [TrueClass, FalseClass], default: false
 # An additional thing to ignore existing filesystems - this will actively lose you data on unmounted filesystems if set.
 attribute :ignore_existing, kind_of: [TrueClass, FalseClass], default: false
-
-# default action is :create
-def initialize(*args)
-  super
-  @action = :create
-end

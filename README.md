@@ -1,14 +1,15 @@
-Description
-===========
+# filesystem cookbook
+
+[![Build Status](https://travis-ci.org/sous-chefs/filesystem.svg?branch=master)](https://travis-ci.org/sous-chefs/filesystem) [![Cookbook Version](https://img.shields.io/cookbook/v/filesystem.svg)](https://supermarket.chef.io/cookbooks/filesystem)
 
 This cookbook exists to generically define and create block device filesystems with the minimum of inputs.
 
 This cookbook supports four main types of block devices:
 
-* normal `device` - drives, ssds, volumes presented by HBAs etc
-* device ID `uuid` - mostly found on drives / known block IDs.
-* LVM Volume Groups `vg` - found on systems using LVM.
-* file-backed `file` - created dynamically and looped back.
+- normal `device` - drives, ssds, volumes presented by HBAs etc
+- device ID `uuid` - mostly found on drives / known block IDs.
+- LVM Volume Groups `vg` - found on systems using LVM.
+- file-backed `file` - created dynamically and looped back.
 
 We will try to create filesystems in two ways: through keys found in node data under 'filesystems' or by being called directly with the `filesystem` default provider. See the example recipe.
 

@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: filesystem
+# Cookbook:: filesystem
 # Resource:: filebacked
 #
-# Copyright 2013 Alex Trull
+# Copyright:: 2013-2017, Alex Trull
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,9 +27,3 @@ attribute :name, kind_of: String, name_attribute: true
 attribute :device, kind_of: String
 attribute :size, kind_of: String
 attribute :sparse, kind_of: [TrueClass, FalseClass], default: true
-
-# default action is :create
-def initialize(*args)
-  super
-  @action = :create
-end
