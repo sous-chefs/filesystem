@@ -1,10 +1,6 @@
 #
-# Cookbook Name:: test
+# Cookbook:: test
 # Recipe:: default
-#
-# Copyright 2017, YOUR_COMPANY_NAME
-#
-# All rights reserved - Do Not Redistribute
 #
 
 filesystem 'loop-1' do
