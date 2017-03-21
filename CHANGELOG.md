@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 ### Changed
 
+## [0.11.1] - 2017-03-20
+- fixed issue with frozen being a ruby default function
+
 ## [0.11.0] - 2017-03-13
 - Added CHANGELOG.md
 - Added CONTRIBUTING.md

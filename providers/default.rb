@@ -284,7 +284,7 @@ action :freeze do
   mount = @new_resource.mount
 
   execute "fsfreeze --freeze #{mount}" do
-    not_if { frozen?(mount) }
+    not_if { filesystem_frozen?(mount) }
   end unless mount.nil?
 
   raise 'mount not specified' if mount.nil?
@@ -294,7 +294,7 @@ action :unfreeze do
   mount = @new_resource.mount
 
   execute "fsfreeze --unfreeze #{mount}" do
-    only_if { frozen?(mount) }
+    only_if { filesystem_frozen?(mount) }
   end unless mount.nil?
 
   raise 'mount not specified' if mount.nil?
