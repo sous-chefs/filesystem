@@ -13,5 +13,4 @@ chef_version     '>= 12.0' if respond_to?(:chef_version)
   supports os
 end
 
-depends 'xfs'
 depends 'lvm', '>= 1.1'
