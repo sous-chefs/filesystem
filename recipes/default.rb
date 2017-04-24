@@ -16,6 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+case node['platform_family']
+when 'debian'
+  package %w(xfsprogs xfsdump xfslibs-dev)
+when 'rhel', 'fedora'
+  package %w(xfsprogs xfsprogs-devel)
+end
 
 # We want to support LVM
 include_recipe 'lvm'
