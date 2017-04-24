@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 ### Changed
 
+## [0.12.0] - 2017-04-24
+- removed xfs dependency, installing packages in default.rb
+
 ## [0.11.1] - 2017-03-20
 - fixed issue with frozen being a ruby default function
 
@@ -31,7 +34,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-[Unreleased]: https://github.com/sous-chefs/filesystem/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/sous-chefs/filesystem/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/sous-chefs/filesystem/compare/v0.11.1...v0.12.0
+[0.11.1]: https://github.com/sous-chefs/filesystem/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/sous-chefs/filesystem/compare/v0.10.6...v0.11.0
 [0.10.6]: https://github.com/sous-chefs/filesystem/compare/v0.10.2...v0.10.6
 [0.10.2]: https://github.com/sous-chefs/filesystem/compare/v0.8.2...v0.10.2
