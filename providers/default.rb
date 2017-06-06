@@ -88,20 +88,20 @@ action :create do
   ruby_block 'wait for device' do
     block do
       # TODO: does this effect bind mounts ?
-      net_fs_types = %w(nfs cifs smp nbd)
+      net_fs_types = %w(nfs nfs4 cifs smp nbd)
       if net_fs_types.include? fstype
         Chef::Log.info "#{fstype} is a netfs will not wait for block device"
-        return
-      end
 
-      count = 0
-      until ::File.exist?(device)
-        count += 1
-        sleep 0.3
-        Chef::Log.debug "waiting for #{device} to exist, try # #{count}"
-        if count >= 1000
-          # TODO: make this a paramater
-          raise Timeout::Error, 'Timeout waiting for device'
+      else
+        count = 0
+        until ::File.exist?(device)
+          count += 1
+          sleep 0.3
+          Chef::Log.debug "waiting for #{device} to exist, try # #{count}"
+          if count >= 1000
+            # TODO: make this a paramater
+            raise Timeout::Error, 'Timeout waiting for device'
+          end
         end
       end
     end
