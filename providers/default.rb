@@ -230,6 +230,7 @@ action :enable do
       options options
       action :enable
       only_if "test -b #{device}"
+      notifies :create, "directory[#{mount}]", :immediately
     end
 
   end
@@ -275,6 +276,7 @@ action :mount do
       action :mount
       only_if "test -b #{device}"
       not_if "mount | grep #{device}\" \" | grep #{mount}\" \""
+      notifies :create, "directory[#{mount}]", :immediately
     end
 
   end
