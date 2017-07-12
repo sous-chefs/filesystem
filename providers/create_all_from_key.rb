@@ -71,6 +71,4 @@ action :create do
       end
     end
   end
-
-  new_resource.updated_by_last_action(true)
 end
