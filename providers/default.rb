@@ -169,12 +169,8 @@ action :create do
         only_if "which mkfs.#{fstype}"
         not_if generic_check_cmd
       end
-
     end
-
   end
-
-  new_resource.updated_by_last_action(true)
 end
 
 # If we're enabling, we create the fstab entry.
