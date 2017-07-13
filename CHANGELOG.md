@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 ### Changed
 
+## [0.12.1] - 2017-07-11
+- updated mount resource in providers/default.rb to notify directory resource immediately to fix mount permissions after mounting
+
 ## [0.12.0] - 2017-04-24
 - removed xfs dependency, installing packages in default.rb
 
