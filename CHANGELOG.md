@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 ### Changed
 
+## [0.13.0] - 2018-02-06
+
+- Remove possible double format of disks if force
+- Do not perform test mount if ignore\_existing and force
+- Use truthy value of ignore\_existing rather than nil?
+
 ## [0.12.1] - 2017-07-11
 - updated mount resource in providers/default.rb to notify directory resource immediately to fix mount permissions after mounting
 
