@@ -26,7 +26,7 @@ env:
 - INSTANCE=default-centos-7
 - INSTANCE=default-fedora-26
 - INSTANCE=default-fedora-27
-- INSTANCE=default-centos-7 CHEF_VERSION=12.5
+- INSTANCE=default-centos-7 CHEF_VERSION=12.5.1
 - INSTANCE=default-debian-8
 - INSTANCE=default-debian-9
 
