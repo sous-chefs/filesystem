@@ -29,6 +29,7 @@ platforms:
     pid_one_command: /usr/lib/systemd/systemd
     intermediate_instructions:
       - RUN yum -y install lsof which systemd-sysv initscripts wget net-tools
+      - RUN cat /proc/mounts > /etc/fstab
 
 - name: debian-8
   driver:
