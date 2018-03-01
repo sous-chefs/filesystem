@@ -3,6 +3,11 @@
 # Recipe:: default
 #
 
+file '/etc/fstab' do
+  action :touch
+  not_if { ::File.exist?('/etc/fstab') }
+end
+
 filesystem 'loop-1' do
   fstype 'ext3'
   file '/opt/loop.img'
