@@ -7,8 +7,7 @@ transport:
 
 provisioner:
   name: dokken
-  chef_version: 12.5.1
-    # <%= ENV['CHEF_VERSION'] || 'latest' %>
+  chef_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
 
 platforms:
 - name: debian-8
