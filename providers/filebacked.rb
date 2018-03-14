@@ -39,8 +39,6 @@ action :create do
     # Case 1)
     # File and Loopback found - nothing to do.
 
-    log "Device #{loopback} already exists for #{file}"
-
   elsif ::File.exist?(file) && device != loopback
     # Case 2)
     # File but no loopback - so we make a loopback

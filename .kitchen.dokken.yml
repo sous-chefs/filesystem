@@ -1,70 +1,77 @@
 driver:
   name: dokken
   privileged: true # because Docker and SystemD/Upstart
-  chef_version: current
 
 transport:
   name: dokken
 
 provisioner:
   name: dokken
-  deprecations_as_errors: true
-
-verifier:
-  name: inspec
+  chef_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
 
 platforms:
+- name: debian-8
+  driver:
+    image: dokken/debian-8
+    pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
+- name: debian-9
+  driver:
+    image: dokken/debian-9
+    pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
 - name: centos-6
   driver:
-    image: centos:6
+    image: dokken/centos-6
     platform: rhel
     pid_one_command: /sbin/init
-    intermediate_instructions:
-      - RUN yum -y install which initscripts net-tools wget
 
 - name: centos-7
   driver:
-    image: centos:7
+    image: dokken/centos-7
     platform: rhel
     pid_one_command: /usr/lib/systemd/systemd
-    intermediate_instructions:
-      - RUN yum -y install lsof which systemd-sysv initscripts wget net-tools
-      - RUN cat /proc/mounts > /etc/fstab
+    internediate_instructions:
+      - RUN touch /etc/fstab
 
-- name: debian-8
+- name: fedora-26
   driver:
-    image: debian:8
-    pid_one_command: /bin/systemd
-    intermediate_instructions:
-      - RUN /usr/bin/apt-get update
-      - RUN /usr/bin/apt-get install apt-transport-https lsb-release procps net-tools -y
-
-- name: fedora-latest
-  driver:
-    image: fedora:latest
+    image: dokken/fedora-26
     pid_one_command: /usr/lib/systemd/systemd
-    intermediate_instructions:
-      - RUN dnf -y install which systemd-sysv initscripts wget net-tools
+    internediate_instructions:
+      - RUN touch /etc/fstab
+
+- name: fedora-27
+  driver:
+    image: dokken/fedora-27
+    pid_one_command: /usr/lib/systemd/systemd
+    internediate_instructions:
+      - RUN touch /etc/fstab
 
 - name: ubuntu-14.04
   driver:
-    image: ubuntu-upstart:14.04
+    image: dokken/ubuntu-14.04
     pid_one_command: /sbin/init
     intermediate_instructions:
       - RUN /usr/bin/apt-get update
-      - RUN /usr/bin/apt-get install apt-transport-https lsb-release procps net-tools -y
 
 - name: ubuntu-16.04
   driver:
-    image: ubuntu:16.04
+    image: dokken/ubuntu-16.04
     pid_one_command: /bin/systemd
     intermediate_instructions:
       - RUN /usr/bin/apt-get update
-      - RUN /usr/bin/apt-get install apt-transport-https lsb-release procps net-tools -y
 
 - name: opensuse-leap
   driver:
-    image: opensuse:leap
+    image: dokken/opensuse-leap
     pid_one_command: /bin/systemd
-    intermediate_instructions:
-      - RUN zypper --non-interactive install aaa_base perl-Getopt-Long-Descriptive which hostname
+
+- name: amazonlinux
+  driver:
+    image: dokken/amazonlinux
+    pid_one_command: /sbin/init
