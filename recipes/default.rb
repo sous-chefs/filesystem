@@ -20,7 +20,7 @@ case node['platform_family']
 when 'debian'
   package %w(xfsprogs xfsdump xfslibs-dev)
 when 'rhel', 'fedora'
-  package %w(xfsprogs xfsprogs-devel)
+  package %w(xfsprogs)
 end
 
 # We want to support LVM
