@@ -17,8 +17,6 @@
 # limitations under the License.
 #
 
-use_inline_resources
-
 include FilesystemMod
 
 action :create do
