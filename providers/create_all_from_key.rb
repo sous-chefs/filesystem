@@ -16,7 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-use_inline_resources
 
 action :create do
   # Our key is the new resource name or if not we go with filesystems
