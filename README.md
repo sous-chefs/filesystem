@@ -1,6 +1,6 @@
 # filesystem cookbook
 
-![Cookbook Version](https://img.shields.io/cookbook/v/filesystem.svg)](https://supermarket.chef.io/cookbooks/filesystem)
+[![Cookbook Version](https://img.shields.io/cookbook/v/filesystem.svg)](https://supermarket.chef.io/cookbooks/filesystem)
 [![Build Status](https://img.shields.io/circleci/project/github/sous-chefs/filesystem/master.svg)](https://circleci.com/gh/sous-chefs/filesystem)
 [![OpenCollective](https://opencollective.com/sous-chefs/backers/badge.svg)](#backers)
 [![OpenCollective](https://opencollective.com/sous-chefs/sponsors/badge.svg)](#sponsors)
