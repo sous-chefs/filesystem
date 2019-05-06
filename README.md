@@ -1,6 +1,10 @@
 # filesystem cookbook
 
-[![Build Status](https://travis-ci.org/sous-chefs/filesystem.svg?branch=master)](https://travis-ci.org/sous-chefs/filesystem) [![Cookbook Version](https://img.shields.io/cookbook/v/filesystem.svg)](https://supermarket.chef.io/cookbooks/filesystem)
+![Cookbook Version](https://img.shields.io/cookbook/v/filesystem.svg)](https://supermarket.chef.io/cookbooks/filesystem)
+[![Build Status](https://img.shields.io/circleci/project/github/sous-chefs/filesystem/master.svg)](https://circleci.com/gh/sous-chefs/filesystem)
+[![OpenCollective](https://opencollective.com/sous-chefs/backers/badge.svg)](#backers)
+[![OpenCollective](https://opencollective.com/sous-chefs/sponsors/badge.svg)](#sponsors)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This cookbook exists to generically define and create block device filesystems with the minimum of inputs.
 
