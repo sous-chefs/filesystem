@@ -21,6 +21,10 @@ You can also use your own key for a list of filesystems, see the example recipe 
 
 Tools have been listed in the following attribute key : filesystem_tools. This allows for extending the support to other/new filesystems.
 
+## Maintainers
+
+This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of Chef cookbook maintainers working together to maintain important cookbooks. If you’d like to know more please visit [sous-chefs.org](https://sous-chefs.org/) or come chat with us on the Chef Community Slack in [#sous-chefs](https://chefcommunity.slack.com/messages/C2V7B88SF).
+
 ## Requirements
 
 - lvm cookbook when creating logical volumes
