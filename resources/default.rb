@@ -18,7 +18,7 @@
 #
 
 # Our filesystem provider creates filesystems and can also mount/enable them.
-actions :create, :enable, :mount, :freeze, :unfreeze
+
 default_action :create
 
 # The name attribute is label of the filesystem.

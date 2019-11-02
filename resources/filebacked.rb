@@ -18,7 +18,7 @@
 #
 
 # We default to creating the file backed loopback.
-actions :create
+
 default_action :create
 
 # The name attribute is the file to be created.

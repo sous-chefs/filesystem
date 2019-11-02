@@ -36,12 +36,6 @@ action :create do
 
   fstype = @new_resource.fstype
   mkfs_options = @new_resource.mkfs_options
-  user = @new_resource.user
-  group = @new_resource.group
-  mode = @new_resource.mode
-  pass = @new_resource.pass
-  dump = @new_resource.dump
-  options = @new_resource.options
   ignore_existing = @new_resource.ignore_existing
 
   vg = @new_resource.vg
@@ -51,7 +45,6 @@ action :create do
   stripes = @new_resource.stripes ? @new_resource.stripes : nil
   mirrors = @new_resource.mirrors ? @new_resource.stripes : nil
 
-  recipe = @new_resource.recipe
   package = @new_resource.package
 
   force = @new_resource.force
