@@ -32,11 +32,11 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ## Main Attributes
 
-##### `filesystems`
+### `filesystems`
 
 Hash of filesytems to setup - this is called filesystems because filesystem is already created/managed by ohai (i.e. no s on the end).
 
-##### `node[:filesystems]` keys
+### `node[:filesystems]` keys
 
 Each filesytem's key is the FS `label`: This explains each key in a filesystems entry. The label must not exceed 12 characters.
 
@@ -44,20 +44,19 @@ We also let you use your own top-level key if you want - see the default recipe 
 
 ## Filesystem Backing Location keys
 
-
-##### `device`
+### `device`
 
 Path to the device to create the filesystem upon.
 
-##### `uuid`
+### `uuid`
 
 UUID of the device to create the filesystem upon.
 
-##### `file`
+### `file`
 
 Path to the file-backed storage to be used for a loopback device. `device` must also be present to specify the loopback. If the `file` is not present it will be created, as long as a size is given.
 
-##### `vg`
+### `vg`
 
 Name of the LVM volume group use as backing store for a logical volume. If not present it will be created, as long as a size is given.
 
@@ -67,91 +66,91 @@ If none of these are present then we try to find a device at the label itself.
 
 ## Filesystem Creation Options
 
-##### `fstype` [ocfs2|ext3|ext4|etc] (default: ext3)
+### `fstype` [ocfs2|ext3|ext4|etc] (default: ext3)
 
 The type of filesystem to be created.
 
-##### `mkfs_options` unique for each filesystem.
+### `mkfs_options` unique for each filesystem
 
 Options to pass to mkfs at creation time.
 
 ## Filesystem Backing Options
 
-##### `size` 10000 (`file`) or 10%VG|10g (`vg`)
+### `size` 10000 (`file`) or 10%VG|10g (`vg`)
 
 The size, only used for filesystems backed by `vg` and `file` storage. If vg then a number suffixied by the scale [g|m|t|p], if a file then just a number [megabytes].
 
-##### `sparse` Boolean (default: true)
+### `sparse` Boolean (default: true)
 
 Sparse file creation, used by the `file` storage, by default we use this for speed, but you may not want that.
 
-##### `stripes` optional
+### `stripes` optional
 
 The stripes, only used for filesystems backed by `vg` aka LVM storage.
 
-##### `mirrors` optional
+### `mirrors` optional
 
 The mirrors, only used for filesystems backed by `vg` aka LVM storage.
 
 ## Filesystem Mounting Options
 
-##### `mount` /path/to/mount
+### `mount` /path/to/mount
 
 Path to mount the filesystem. (If present we will mount the filesystem - this is rather important)
 
-##### `options` rw,noatime,defaults (default: defaults)
+### `options` rw,noatime,defaults (default: defaults)
 
 Options to mount with and add to the fstab.
 
-##### `dump` 0|1|2 (default: 0)
+### `dump` 0|1|2 (default: 0)
 
 Dump entry for fstab
 
-##### `pass` 0|1|2 (default: 0)
+### `pass` 0|1|2 (default: 0)
 
 Pass entry for fstab
 
-##### `user` name
+### `user` name
 
 Owner of the mountpoint, otherwise we use the chef default. We will not try to create users. You should use the users cookbook for that.
 
-##### `group` name
+### `group` name
 
 Group of the mountpoint, otherwise we use the chef default. We will not try to create groups. You should write a cookbook to make them nicely.
 
-##### `mode` 775
+### `mode` 775
 
 Mode of the mountpoint, otherwise we use the chef default.
 
 ## Package and Recipe Options
 
-##### `package` Package name to install, if specified.
+### `package` Package name to install, if specified
 
 Used to support the filesystem
 
-##### `recipe` Recipe to run, if specified - for future use, not currently supported from the lwrp.
+### `recipe` Recipe to run, if specified - for future use, not currently supported from the lwrp
 
 Used to support the filesystem
 
 ## Atypical Behaviour Modifiers
 
-##### `force` Boolean (default: false)
+### `force` Boolean (default: false)
 
 Set to true we unsafely create filesystems. If there is data it will be lost. Should not use this unless you are quite confident.
 
-##### `ignore_existing` Boolean (default: false)
+### `ignore_existing` Boolean (default: false)
 
 Set to true we will ignore existing filesystems and recreate them. Double Dangerous and only for unsound behaviour. Use with 'force' true.
 
-##### `nomkfs` Boolean (default: false)
+### `nomkfs` Boolean (default: false)
 
 Set to true to disable creation of the filesystem.
 
-##### `nomount` Boolean (default: false)
+### `nomount` Boolean (default: false)
 
 Set to true to disable mounting of the filesystem.
 
-##### `noenable` Boolean (default: false)
+### `noenable` Boolean (default: false)
 
 Set to true to disable adding to fstab.
 
@@ -204,8 +203,8 @@ end
 
 ## Links
 
-Development is at https://github.com/atrullmdsol/filesystem_cookbook
-Opscode community page is at http://community.opscode.com/cookbooks/filesystem
+Development is at <https://github.com/atrullmdsol/filesystem_cookbook>
+Opscode community page is at <http://community.opscode.com/cookbooks/filesystem>
 
 ## Authors
 
