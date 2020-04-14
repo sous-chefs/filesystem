@@ -22,7 +22,7 @@ actions :create, :enable, :mount, :freeze, :unfreeze
 default_action :create
 
 # The name attribute is label of the filesystem.
-attribute :name, kind_of: String, name_attribute: true
+
 attribute :label, kind_of: String
 
 # We have several kinds of device we might be using
