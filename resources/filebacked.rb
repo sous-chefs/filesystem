@@ -22,7 +22,6 @@ actions :create
 default_action :create
 
 # The name attribute is the file to be created.
-attribute :name, kind_of: String, name_attribute: true
 
 attribute :device, kind_of: String
 attribute :size, kind_of: String
