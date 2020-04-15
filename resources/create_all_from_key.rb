@@ -21,5 +21,3 @@
 actions :create
 default_action :create
 
-# The name attribute is the key of the filesystems.
-
