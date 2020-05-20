@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- resolved cookstyle error: providers/filebacked.rb:36:14 refactor: `ChefModernize/ShellOutHelper`
+
 ## 2.0.0 - 2020-05-05
 
 - Require Chef Infra Client 14+

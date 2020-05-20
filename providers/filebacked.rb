@@ -33,7 +33,7 @@ action :create do
 
   get_loopback_cmd = "losetup -a | grep #{file} | grep #{device}"
 
-  loopback = Mixlib::ShellOut.new(get_loopback_cmd).run_command.stdout.gsub(/: \[.*/, '').strip
+  loopback = shell_out(get_loopback_cmd).stdout.gsub(/: \[.*/, '').strip
 
   if ::File.exist?(file) && device == loopback
     # Case 1)
