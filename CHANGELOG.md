@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2.0.1 - 2020-05-20
 
 - resolved cookstyle error: providers/filebacked.rb:36:14 refactor: `ChefModernize/ShellOutHelper`
 
