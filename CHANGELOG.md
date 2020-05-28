@@ -4,7 +4,6 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-
 - Removed Dangerfile from rubocop.yml
 - Deleted rubocop.yml
 - Ran latest cookstyle to clean up minor style issues
