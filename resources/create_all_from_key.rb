@@ -20,4 +20,3 @@
 # We default to creating all filesystems found in the key
 actions :create
 default_action :create
-

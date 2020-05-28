@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Removed Dangerfile from rubocop.yml
+- Deleted rubocop.yml
+- Ran latest cookstyle to clean up minor style issues
+
 ## 2.0.1 - 2020-05-20
 
 - resolved cookstyle error: providers/filebacked.rb:36:14 refactor: `ChefModernize/ShellOutHelper`
