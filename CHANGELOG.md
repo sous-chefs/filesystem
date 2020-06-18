@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2.0.2 (2020-06-18)
 
 - Removed Dangerfile from rubocop.yml
 - Deleted rubocop.yml
@@ -71,4 +71,4 @@ All notable changes to this project will be documented in this file.
 [0.11.1]: https://github.com/sous-chefs/filesystem/compare/v0.11.0...v0.11.1
 [0.12.0]: https://github.com/sous-chefs/filesystem/compare/v0.11.1...v0.12.0
 [1.0.0]: https://github.com/sous-chefs/filesystem/compare/v0.12.0...v1.0.0
-[unreleased]: https://github.com/sous-chefs/filesystem/compare/v0.12.0...HEAD
+[2.0.2 (2020-06-18)]: https://github.com/sous-chefs/filesystem/compare/v0.12.0...HEAD
