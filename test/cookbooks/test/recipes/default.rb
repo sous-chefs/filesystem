@@ -34,16 +34,29 @@ filesystem 'loop-3' do
   action [:create, :enable, :mount, :freeze, :unfreeze]
 end
 
-# filesystem actions
-#   :create
-#   :enable
-#   :mount
-#   :freeze
-#   :unfreeze
+filesystem 'dev1' do
+  device_defer true
+  fstype 'ext3'
+  size '10000'
+  device '/dev/dev1'
+  mount '/mnt/dev-1'
+  action [:create, :enable, :mount]
+end
 
-# filesystem_filebacked actions
-#   :create   :create
+filesystem 'uuid1' do
+  device_defer true
+  fstype 'ext3'
+  size '10000'
+  uuid 'devuuid'
+  mount '/mnt/uuid-1'
+  action [:create, :enable, :mount]
+end
 
-# create lots of file systems looking for node attributes specs
-# filesystem_create_all_from_key actions
-#   :create   :create
+filesystem 'label1' do
+  device_defer true
+  fstype 'ext3'
+  size '10000'
+  label 'label1'
+  mount '/mnt/label-1'
+  action [:create, :enable, :mount]
+end

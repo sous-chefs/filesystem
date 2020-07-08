@@ -74,6 +74,8 @@ action :create do
         file.nil?
       end
     end
+  elsif new_resource.device_defer && !::File.exist?(device)
+    return
   end
 
   ruby_block 'wait for device' do

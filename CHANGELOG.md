@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - Added tests for the freeze action
 - Updated the versions of platforms to test against
 
+- Add the device_defer attribute to the filesystem resource. If set to true and the backing device does not exist the resource returns without processing or error.
+
 ## 2.0.2 (2020-06-18)
 
 - Removed Dangerfile from rubocop.yml
