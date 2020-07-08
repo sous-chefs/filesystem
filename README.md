@@ -134,6 +134,8 @@ Used to support the filesystem
 
 ## Atypical Behaviour Modifiers
 
+### `device_defer` Skip file system creation if the backing device does not exist. Defaults to false
+
 ### `force` Boolean (default: false)
 
 Set to true we unsafely create filesystems. If there is data it will be lost. Should not use this unless you are quite confident.

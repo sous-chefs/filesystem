@@ -35,6 +35,7 @@ attribute :fstype, kind_of: String, default: 'ext3'
 attribute :mkfs_options, kind_of: String, default: ''
 attribute :package, kind_of: String
 attribute :recipe, kind_of: String
+attribute :device_defer, kind_of: [TrueClass, FalseClass], default: false
 
 # LVM and filebacked
 attribute :sparse, kind_of: [TrueClass, FalseClass], default: true

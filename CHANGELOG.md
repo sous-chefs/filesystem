@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unpublished
+
+- Add the device_defer attribute to the filesystem resource. If set to true and the backing device does not exist the resource returns without processing or error.
+
 ## 2.0.2 (2020-06-18)
 
 - Removed Dangerfile from rubocop.yml
