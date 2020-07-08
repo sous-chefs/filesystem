@@ -6,7 +6,8 @@ module FilesystemMod
 
   MOUNT_EX_FAIL = 32 unless const_defined?(:MOUNT_EX_FAIL)
   MOUNT_EX_BUSY = 1 unless const_defined?(:MOUNT_EX_BUSY)
-  NET_FS_TYPES = %w(nfs cifs smp nbd).freeze unless const_defined?(:NET_FS_TYPES)
+  NET_FS_TYPES = %w(nfs nfs4 cifs smp nbd).freeze unless const_defined?(:NET_FS_TYPES)
+  NFS_TYPES = %w(nfs nfs4).freeze unless const_defined?(:NFS_TYPES)
 
   # Check to determine if the device is mounted.
   def mounted?(device)

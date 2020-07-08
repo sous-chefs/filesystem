@@ -34,7 +34,7 @@ property  :fstype, String, default: 'ext3'
 property  :mkfs_options, String, default: ''
 property  :package, String
 property  :recipe, String
-attribute :device_defer, [TrueClass, FalseClass], default: false
+property  :device_defer, [true, false], default: false
 
 # LVM and filebacked
 property  :sparse, [true, false], default: true
@@ -61,7 +61,7 @@ property  :ignore_existing, [true, false], default: false
 action_class do
   include FilesystemMod
 
-  def wait_for_device(device)
+  def wait_for_device
     count = 0
     until ::File.exist?(device)
       count += 1
@@ -90,6 +90,20 @@ action_class do
 
   def label
     @label = @new_resource.label || @new_resource.name
+  end
+
+  # create the mount point directory
+  # mount points should not have files in them and have no
+  # reason to be user writable
+  def mount_point(mount_location)
+    directory "Mount point for #{mount_location}" do
+      path mount_location
+      recursive true
+      owner 'root'
+      group 'root'
+      mode '755'
+      not_if { Pathname.new(mount_location).mountpoint? }
+    end
   end
 end
 
@@ -134,20 +148,11 @@ action :create do
         file.nil?
       end
     end.run_action(:create)
+  elsif new_resource.device_defer && !::File.exist?(device) && !FilesystemMod::NET_FS_TYPES.include?(fstype)
+    return
   end
 
-  unless ::File.exist?(device) || netfs?(fstype)
-    count = 0
-    until ::File.exist?(device)
-      count += 1
-      sleep 0.3
-      Chef::Log.debug "waiting for #{device} to exist, try # #{count}"
-      if count >= 1000
-        # TODO: make this a paramater
-        raise Timeout::Error, 'Timeout waiting for device'
-      end
-    end
-  end
+  wait_for_device unless ::File.exist?(device) || netfs?(fstype)
 
   # We only try and create a filesystem if the device exists and is unmounted
   unless mounted?(device)
@@ -171,7 +176,7 @@ action :create do
 
     # Install the filesystem's default package and recipes as configured in default attributes.
     mkfs_force_options = node['filesystem_tools'].fetch(fstype, nil)
-    # One day Chef will support calling dynamic include_recipe from LWRPS but until then - see https://tickets.opscode.com/browse/CHEF-611
+    # One day Chef will support calling dynamic include_recipe from custom resources but until then - see https://tickets.opscode.com/browse/CHEF-611
     # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
     if mkfs_force_options && mkfs_force_options.fetch('forceopt', false)
       # if force is true, we set the force option. If it isn't set it remains empty.
@@ -184,9 +189,9 @@ action :create do
     if force
       return if generic_check_cmd && !ignore_existing
     elsif generic_check_cmd && !shell_out("which mkfs.#{fstype}").exitstatus == 0
-      # We create the filesystem, but only if the device does not already contain a mountable filesystem, and we have the tools.
       return
     end
+    # We create the filesystem, but only if the device does not already contain a mountable filesystem, and we have the tools.
     converge_by("Mkfs type #{fstype} #{label} #{device}") do
       shell_out!(mkfs_cmd)
     end
@@ -198,9 +203,6 @@ end
 action :enable do
   mount = @new_resource.mount
   fstype = @new_resource.fstype
-  user = @new_resource.user
-  group = @new_resource.group
-  mode = @new_resource.mode
   pass = @new_resource.pass
   dump = @new_resource.dump
   options = @new_resource.options
@@ -208,13 +210,7 @@ action :enable do
 
   if mount
 
-    # We use the chef directory method to create the mountpoint with the settings we provide
-    directory mount do
-      recursive true
-      owner user if user
-      group group if group
-      mode mode if mode
-    end
+    mount_point(mount)
 
     # Substitute the device with the file when in loopback mode.
     # This should allow the mount to come back up on reboot.
@@ -224,37 +220,23 @@ action :enable do
       options = [options, "loop=#{device}"].compact.join(',')
     end
 
-    # Mount using the chef resource
+    return if new_resource.device_defer && !::File.exist?(device) && !FilesystemMod::NET_FS_TYPES.include?(fstype)
+
+    # Update fstab using the chef mount resource
     mount mount do
+      action :enable
       device device_or_file
       pass pass
       dump dump
       fstype fstype
       options options
-      action :enable
-      only_if "test -b #{device}"
-      notifies :create, "directory[#{mount}]", :immediately
     end
-
-    # NFS?
 
   end
 end
 
 # If we're mounting, we mount.
 action :mount do
-  device = if @new_resource.file
-             @new_resource.device
-           elsif @new_resource.vg
-             "/dev/mapper/#{@new_resource.vg}-#{label}"
-           elsif @new_resource.uuid
-             "/dev/disk/by-uuid/#{@new_resource.uuid}"
-           elsif @new_resource.device
-             @new_resource.device
-           else
-             "/dev/mapper/#{label}"
-           end
-
   mount = @new_resource.mount
   fstype = @new_resource.fstype
   user = @new_resource.user
@@ -263,28 +245,36 @@ action :mount do
 
   if mount
 
-    # We use the chef directory method to create the mountpoint with the settings we provide
-    directory mount do
-      recursive true
-      owner user if user
-      group group if group
-      mode mode if mode
-    end
+    mount_point(mount)
+
+    return if new_resource.device_defer && !::File.exist?(device) && !FilesystemMod::NET_FS_TYPES.include?(fstype)
 
     # Mount using the chef resource
+    mnt_device = device
     mount mount do
-      device device
+      device mnt_device
       fstype fstype
       options options
       action :mount
-      only_if "test -b #{device}"
+      # Pathname.new(mount).mountpoint? would be a better check but might
+      # cause different behavior
       not_if "mount | grep #{device}\" \" | grep #{mount}\" \""
-      notifies :create, "directory[#{mount}]", :immediately
     end
 
-    # handle NFS mounts
+    # set directory attributes within the mounted file system
     # assume root has access to the mounted file system
-
+    # do not change directory settings for NETWORK mounted file systems
+    # NFS4 file systems in particular should not allow root access
+    unless FilesystemMod::NET_FS_TYPES.include?(fstype)
+      directory mount do
+        path mount
+        recursive true
+        owner user
+        group group
+        mode mode
+        only_if { Pathname.new(mount).mountpoint? }
+      end
+    end
   end
 end
 

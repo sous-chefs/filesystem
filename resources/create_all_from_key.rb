@@ -31,7 +31,7 @@ action :create do
   filesystems_to_be_created.each_key do |label|
     fs = filesystems_to_be_created[label]
 
-    # We pass all possible options to the lwrp that creates, enables and mounts filesystems.
+    # We pass all possible options to the custom resource that creates, enables and mounts filesystems.
     filesystem label do
       label fs['label'] if fs['label']
       device fs['device'] if fs['device']

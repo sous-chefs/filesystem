@@ -2,15 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2.0.3 - 2020-07-07
+## 3.0.0 - 2020-07-07
 
 - Simplified the filesystem freeze action code
 - Added tests for the freeze action
 - Updated the versions of platforms to test against
-
-- Add the device_defer attribute to the filesystem resource. If set to true and the backing device does not exist the resource returns without processing or error.
-
+- Add the device_defer attribute to the filesystem resource. If set to true and the backing device does not exist the default resource returns without processing or error.
 - Convert the lwrp resources to custom resources
+- Add dokken cookbook converges and tests to the github flow
 
 ## 2.0.2 (2020-06-18)
 

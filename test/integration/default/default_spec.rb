@@ -11,6 +11,15 @@ end
 
 describe mount('/mnt/loop-1') do
   it { should be_mounted }
-  its('device') { should eq '/dev/loop0' }
+  its('device') { should eq '/dev/loop5' }
   its('type') { should eq 'ext3' }
+end
+
+if os.family == 'debian'
+  describe etc_fstab.where { mount_point == '/mnt/nfs-1' } do
+    its('file_system_type') { should cmp 'nfs' }
+  end
+  describe etc_fstab.where { mount_point == '/mnt/nfs-4' } do
+    its('file_system_type') { should cmp 'nfs4' }
+  end
 end

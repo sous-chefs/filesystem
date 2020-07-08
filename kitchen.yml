@@ -22,11 +22,11 @@ platforms:
   - name: debian-9
   - name: debian-10
   - name: fedora-31
+  - name: opensuse-leap-15.1
   - name: ubuntu-16.04
   - name: ubuntu-18.04
   - name: ubuntu-20.04
   - name: freebsd-12
-  - name: opensuse-leap-15.1
 
 suites:
   - name: default
@@ -34,3 +34,4 @@ suites:
       - recipe[filesystem]
       - recipe[filesystem::example]
       - recipe[test]
+      - recipe[test::nfs]

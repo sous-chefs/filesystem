@@ -23,7 +23,7 @@
 # We want to support LVM
 include_recipe 'lvm'
 
-# If we have contents at the default location, we try to make the filesystems with the LWRP.
+# If we have contents at the default location, we try to make the filesystems with the custom resources.
 filesystem_create_all_from_key 'filesystems' do
   action :create
 end
@@ -37,7 +37,7 @@ filesystem_create_all_from_key 'mylittlefilesystems' do
   action :create
 end
 
-# Or we can call the creation of a filesystem directly with the filesystem default LWRP
+# Or we can call the creation of a filesystem directly with the filesystem default custom resources
 # filesystem 'littlelabel' do
 #   fstype 'ext3'
 #   device '/dev/sdb1'

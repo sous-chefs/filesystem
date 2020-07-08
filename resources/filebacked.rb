@@ -32,7 +32,6 @@ action :create do
   sparse = @new_resource.sparse
   device = @new_resource.device
 
-
   # Idempotent behaviour:
 
   # Case 1) File found, Loopback found => return loopback.
