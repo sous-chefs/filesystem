@@ -26,7 +26,6 @@ include_recipe 'lvm'
 # If we have contents at the default location, we try to make the filesystems with the LWRP.
 filesystem_create_all_from_key 'filesystems' do
   action :create
-  not_if { node['filesystems'].nil? || node['filesystems'].empty? }
 end
 
 ## Examples:
@@ -36,16 +35,15 @@ end
 # If we have contents at a different location we try and make all those other filesystems to.
 filesystem_create_all_from_key 'mylittlefilesystems' do
   action :create
-  not_if { node['mylittlefilesystems'].nil? || node['mylittlefilesystems'].empty? }
 end
 
 # Or we can call the creation of a filesystem directly with the filesystem default LWRP
-filesystem 'littlelabel' do
-  fstype 'ext3'
-  device '/dev/sdb1'
-  mount '/mnt/littlelabel'
-  action [:create, :enable, :mount]
-end
+# filesystem 'littlelabel' do
+#   fstype 'ext3'
+#   device '/dev/sdb1'
+#   mount '/mnt/littlelabel'
+#   action [:create, :enable, :mount]
+# end
 
 # Or what about in combination with the mdadm provider ?
 # mdadm "/dev/sd0" do

@@ -32,4 +32,5 @@ suites:
   - name: default
     run_list:
       - recipe[filesystem]
+      - recipe[filesystem::example]
       - recipe[test]
