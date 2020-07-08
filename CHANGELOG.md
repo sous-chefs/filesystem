@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.0.3 - 2020-07-07
+
+- Simplified the filesystem freeze action code
+- Added tests for the freeze action
+- Updated the versions of platforms to test against
+
 ## 2.0.2 (2020-06-18)
 
 - Removed Dangerfile from rubocop.yml

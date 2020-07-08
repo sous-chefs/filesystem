@@ -24,7 +24,7 @@ when 'rhel', 'fedora'
 end
 
 # We want to support LVM
-include_recipe 'lvm'
+include_recipe 'lvm' unless platform_family?('freebsd')
 
 # If we have contents at the default location, we try to make the filesystems with the LWRP.
 filesystem_create_all_from_key 'filesystems' do
