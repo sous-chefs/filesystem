@@ -40,11 +40,8 @@ jobs:
     strategy:
       matrix:
         os:
-          - 'amazonlinux2'
           - 'centos-8'
           - 'debian-10'
-          - 'fedora-31'
-          - 'opensuse-leap-15.1'
           - 'ubuntu-2004'
         suite:
           - 'default'
