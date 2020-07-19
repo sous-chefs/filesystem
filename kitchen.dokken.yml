@@ -12,55 +12,42 @@ provisioner:
   chef_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
 
 platforms:
-  - name: debian-8
-    driver:
-      image: dokken/debian-8
-      pid_one_command: /bin/systemd
-      intermediate_instructions:
-        - RUN /usr/bin/apt-get update
 
-  - name: debian-9
+  - name: amazonlinux2
     driver:
-      image: dokken/debian-9
-      pid_one_command: /bin/systemd
-      intermediate_instructions:
-        - RUN /usr/bin/apt-get update
+      image: dokken/amazonlinux2
+      pid_one_command: /sbin/init
 
-  - name: centos-7
+  - name: centos-8
     driver:
-      image: dokken/centos-7
+      image: dokken/centos-8
       platform: rhel
       pid_one_command: /usr/lib/systemd/systemd
       internediate_instructions:
         - RUN touch /etc/fstab
 
-  - name: fedora-26
+  - name: debian-10
     driver:
-      image: dokken/fedora-26
-      pid_one_command: /usr/lib/systemd/systemd
-      internediate_instructions:
-        - RUN touch /etc/fstab
-
-  - name: fedora-27
-    driver:
-      image: dokken/fedora-27
-      pid_one_command: /usr/lib/systemd/systemd
-      internediate_instructions:
-        - RUN touch /etc/fstab
-
-  - name: ubuntu-18.04
-    driver:
-      image: dokken/ubuntu-18.04
+      image: dokken/debian-10
       pid_one_command: /bin/systemd
       intermediate_instructions:
         - RUN /usr/bin/apt-get update
 
-  - name: opensuse-leap
+  - name: fedora-31
     driver:
-      image: dokken/opensuse-leap
+      image: dokken/fedora-31
+      pid_one_command: /usr/lib/systemd/systemd
+      internediate_instructions:
+        - RUN touch /etc/fstab
+
+  - name: opensuse-leap-15.1
+    driver:
+      image: dokken/opensuse-leap-15.1
       pid_one_command: /bin/systemd
 
-  - name: amazonlinux
+  - name: ubuntu-20.04
     driver:
-      image: dokken/amazonlinux
-      pid_one_command: /sbin/init
+      image: dokken/ubuntu-20.04
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update

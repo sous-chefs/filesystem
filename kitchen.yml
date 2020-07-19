@@ -14,17 +14,13 @@ verifier:
   sudo: false
 
 platforms:
-  - name: amazon-linux
+  - name: amazonlinux2
     driver_config:
       box: mvbcoding/awslinux
-  - name: centos-7
   - name: centos-8
-  - name: debian-9
   - name: debian-10
   - name: fedora-31
   - name: opensuse-leap-15.1
-  - name: ubuntu-16.04
-  - name: ubuntu-18.04
   - name: ubuntu-20.04
   - name: freebsd-12
 
