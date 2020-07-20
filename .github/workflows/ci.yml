@@ -41,7 +41,6 @@ jobs:
       matrix:
         os:
           - 'centos-8'
-          - 'debian-10'
           - 'ubuntu-2004'
         suite:
           - 'default'
