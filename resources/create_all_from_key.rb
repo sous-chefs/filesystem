@@ -68,7 +68,7 @@ action :create do
         # Default expected behiavour - create, enable and mount
         action [:create, :enable, :mount]
       else
-        # Non-default expected behaviour if no mountpoint is given : we only create the filesystem, nothing else.
+        # Non-default expected behavior if no mountpoint is given : we only create the filesystem, nothing else.
         action [:create]
       end
     end

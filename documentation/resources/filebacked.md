@@ -27,8 +27,10 @@ Fast file creation. The file is not filled with zeros.
 
 ## Usage
 
+```ruby
 filesystem_filebacked '/tmp/myfile'  do
   device /dev/loop1
   size 10
   sparse true
 end
+```

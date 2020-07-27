@@ -68,7 +68,7 @@ action_class do
       sleep 0.3
       Chef::Log.debug "waiting for #{device} to exist, try # #{count}"
       if count >= 1000
-        # TODO: make this a paramater
+        # TODO: make this a parameter
         raise Timeout::Error, 'Timeout waiting for device'
       end
     end

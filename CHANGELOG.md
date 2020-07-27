@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unpublished - 2020-07-07
+## Unpublished
 
 - Simplified the filesystem freeze action code
 - Added tests for the freeze action
