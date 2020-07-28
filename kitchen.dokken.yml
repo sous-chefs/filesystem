@@ -58,7 +58,7 @@ platforms:
   - name: opensuse-leap-15.1
     driver:
       image: dokken/opensuse-leap-15.1
- 
+
   - name: ubuntu-18.04
     driver:
       image: dokken/ubuntu-20.04
