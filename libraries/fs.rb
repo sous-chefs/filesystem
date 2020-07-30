@@ -5,7 +5,9 @@ module FilesystemMod
   include Chef::Mixin::ShellOut
 
   MOUNT_EX_FAIL = 32 unless const_defined?(:MOUNT_EX_FAIL)
-  NET_FS_TYPES = %w(nfs cifs smp nbd).freeze unless const_defined?(:NET_FS_TYPES)
+  MOUNT_EX_BUSY = 1 unless const_defined?(:MOUNT_EX_BUSY)
+  NET_FS_TYPES = %w(nfs nfs4 cifs smp nbd).freeze unless const_defined?(:NET_FS_TYPES)
+  NFS_TYPES = %w(nfs nfs4).freeze unless const_defined?(:NFS_TYPES)
 
   # Check to determine if the device is mounted.
   def mounted?(device)
@@ -14,16 +16,13 @@ module FilesystemMod
   end
 
   # Check to determine if the mount is frozen.
+  # There is no really good way to determine if a file system is frozen.
+  # Trying to remount the file system will return a FAIL or BUSY, we need to test for both but the results can be misleading
   def filesystem_frozen?(mount_loc)
     fields = File.readlines('/proc/mounts').map(&:split).detect { |field| field[1] == mount_loc }
     raise "#{mount_loc} not mounted" unless fields
-    remount = shell_out('mount', '-o', "remount,#{fields[3]}", mount_loc)
-    if remount.exitstatus == MOUNT_EX_FAIL
-      true
-    else
-      remount.error!
-      false
-    end
+    stat = shell_out('mount', '-o', "remount,#{fields[3]}", mount_loc)
+    [MOUNT_EX_FAIL, MOUNT_EX_BUSY].include?(stat.exitstatus) ? true : false
   end
 
   # Check if provided filesystem type is netfs
