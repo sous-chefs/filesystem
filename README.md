@@ -10,7 +10,7 @@ This cookbook exists to generically define and create block device filesystems w
 
 This cookbook supports four main types of block devices:
 
-- normal `device` - drives, ssds, volumes presented by HBAs etc
+- normal `device` - drives, SSDs, volumes presented by HBAs etc
 - device ID `uuid` - mostly found on drives / known block IDs.
 - LVM Volume Groups `vg` - found on systems using LVM.
 - file-backed `file` - created dynamically and looped back.
@@ -21,7 +21,7 @@ You can also use your own key for a list of filesystems, see the example recipe 
 
 Tools have been listed in the following attribute key : filesystem_tools. This allows for extending the support to other/new filesystems.
 
-Network file systems, nfs and others, are somewhat supported. This cookbook will attempt to create a mount point, enable the filesystem by adding an /etc/fstab entry for the filesystem mount and will attempt to mount the filesystem.  This cookbook does not attempt to modify the internal contents of network filesystems.
+Network file systems, nfs and others, are somewhat supported. This cookbook will attempt to create a mount point, enable the filesystem by adding an `/etc/fstab` entry for the filesystem mount and will attempt to mount the filesystem.  This cookbook does not attempt to modify the internal contents of network filesystems.
 
 ## Maintainers
 
@@ -34,8 +34,8 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ## Resources
 
-- [filesystem_create_all_from_keys](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/create_all_from_keys.md) - Create a filesystem, add a defintion to fstab, mount the filesystem
-- [filesystem](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/filesystem.md) - Create a filesystem, add a defintion to fstab, mount the filesystem
+- [filesystem_create_all_from_keys](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/create_all_from_keys.md) - Create a filesystem, add a definition to fstab, mount the filesystem
+- [filesystem](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/filesystem.md) - Create a filesystem, add a definition to fstab, mount the filesystem
 - [filesystem_filebacked](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/filebacked.md) - Create a loopback filesystem
 
 ## Main Attributes
@@ -61,7 +61,7 @@ Keyed filesystem creation:
      "device": "/dev/sdb",
      "mount": "/db",
      "fstype": "xfs",
-     "optons": "noatime,nobarrier",
+     "options": "noatime,nodev",
      "mkfs_options": "-d sunit=128,swidth=2048"
    },
    "applv1": {
