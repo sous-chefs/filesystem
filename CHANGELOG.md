@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- resolved cookstyle error: libraries/fs.rb:14:5 convention: `Style/RedundantAssignment`
+- resolved cookstyle error: libraries/fs.rb:15:1 convention: `Layout/EmptyLinesAroundMethodBody`
+- resolved cookstyle error: libraries/fs.rb:15:1 convention: `Layout/TrailingWhitespace`
+
 ## 3.0.1 (2020-08-07)
 
 - Fix README spelling errors and formatting
