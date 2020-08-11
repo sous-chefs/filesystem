@@ -11,8 +11,7 @@ module FilesystemMod
 
   # Check to determine if the device is mounted.
   def mounted?(device)
-    mounted = shell_out("grep -q '#{device}' /proc/mounts").exitstatus != 0 ? nil : shell_out("grep -q '#{device}' /proc/mounts").exitstatus
-    mounted
+    shell_out("grep -q '#{device}' /proc/mounts").exitstatus != 0 ? nil : shell_out("grep -q '#{device}' /proc/mounts").exitstatus
   end
 
   # Check to determine if the mount is frozen.
