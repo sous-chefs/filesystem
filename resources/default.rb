@@ -115,7 +115,7 @@ action :create do
   file = @new_resource.file
   sparse = @new_resource.sparse
   size = @new_resource.size
-  stripes = @new_resource.stripes ? @new_resource.stripes : nil
+  stripes = @new_resource.stripes || nil
   mirrors = @new_resource.mirrors ? @new_resource.stripes : nil
   package = @new_resource.package
   force = @new_resource.force
