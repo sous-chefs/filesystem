@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- resolved cookstyle error: resources/default.rb:118:35 convention: `Style/RedundantCondition`
+
 ## 3.0.2 (2020-09-16)
 
 - resolved cookstyle error: libraries/fs.rb:14:5 convention: `Style/RedundantAssignment`
