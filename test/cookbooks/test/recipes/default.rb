@@ -28,7 +28,7 @@ filesystem 'loop-2' do
   fstype 'ext3'
   file '/opt/loop.img'
   size '10000'
-  device '/dev/loop5'
+  device '/dev/loop6'
   mount '/mnt/loop-2'
   action [:create, :enable, :mount, :freeze]
 end
@@ -37,7 +37,7 @@ filesystem 'loop-3' do
   fstype 'ext3'
   file '/opt/loop.img'
   size '10000'
-  device '/dev/loop5'
+  device '/dev/loop7'
   mount '/mnt/loop-3'
   action [:create, :enable, :mount, :freeze, :unfreeze]
 end
@@ -66,5 +66,28 @@ filesystem 'label1' do
   size '10000'
   label 'label1'
   mount '/mnt/label-1'
+  action [:create, :enable, :mount]
+end
+
+# verify the idempotence of filesystem initialization
+# add a file
+# unmount it
+# create the file system again - should not run mkfs again which would wipe out the filet
+
+file '/mnt/loop-1/testfile'
+
+mount '/mnt/loop-1 unmount' do
+  action :unmount
+  device '/dev/loop5'
+  mount_point '/mnt/loop-1'
+end
+
+filesystem 'loop-1 remount' do
+  fstype 'ext3'
+  file '/opt/loop.img'
+  label 'loop-1'
+  size '10000'
+  device '/dev/loop5'
+  mount '/mnt/loop-1'
   action [:create, :enable, :mount]
 end

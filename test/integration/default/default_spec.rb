@@ -15,6 +15,11 @@ describe mount('/mnt/loop-1') do
   its('type') { should eq 'ext3' }
 end
 
+describe file('/mnt/loop-1/testfile') do
+  it { should exist }
+  it { should be_file }
+end
+
 if os.family == 'debian'
   describe etc_fstab.where { mount_point == '/mnt/nfs-1' } do
     its('file_system_type') { should cmp 'nfs' }
