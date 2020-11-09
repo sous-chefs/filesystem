@@ -157,12 +157,9 @@ action :create do
   # We only try and create a filesystem if the device exists and is unmounted
   unless mounted?(device)
 
-    # We use this check to test if a device's filesystem is already mountable.
-    generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
-
     # Install the filesystem's default package and recipes as configured in default attributes.
     fs_tools = node['filesystem_tools'].fetch(fstype, nil)
-    # One day Chef will support calling dynamic include_recipe from resources but until then - see https://tickets.opscode.com/browse/CHEF-611
+
     if fs_tools && fs_tools.fetch('package', false)
       packages = fs_tools['package'].split(',')
       packages.each { |default_package| package default_package.to_s }
@@ -183,13 +180,21 @@ action :create do
       force_option = force ? mkfs_force_options['forceopt'] : ''
     end
 
+    # Check to see if the existing file system is mountable
+    generic_check_cmd = "mkdir -p /tmp/filesystemchecks/#{label}; mount #{device} /tmp/filesystemchecks/#{label} && umount /tmp/filesystemchecks/#{label}"
+    generic_check = shell_out(generic_check_cmd)
+
     # We form our mkfs command
     mkfs_cmd = "mkfs -t #{fstype} #{force_option} #{mkfs_options} -L #{label} #{device}"
 
     if force
-      return if generic_check_cmd && !ignore_existing
-    elsif generic_check_cmd && !shell_out("which mkfs.#{fstype}").exitstatus == 0
-      return
+      # force rebuilt requires both force and ignore_existing to be set
+      return if generic_check.exitstatus == 0 && !ignore_existing
+    else
+      # Don't remake the file system if it already exists
+      return if generic_check.exitstatus == 0
+      # Remake only if the right mkfs exists
+      return if !shell_out("which mkfs.#{fstype}").exitstatus == 0
     end
     # We create the filesystem, but only if the device does not already contain a mountable filesystem, and we have the tools.
     converge_by("Mkfs type #{fstype} #{label} #{device}") do
