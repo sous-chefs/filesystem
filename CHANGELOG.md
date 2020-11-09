@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 3.0.3 (2020-11-09)
 
 - resolved cookstyle error: resources/default.rb:118:35 convention: `Style/RedundantCondition`
 - fix the check for an existing mountable filesystem before running mkfs again
