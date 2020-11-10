@@ -34,7 +34,7 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ## Resources
 
-- [filesystem_create_all_from_keys](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/create_all_from_keys.md) - Create a filesystem, add a definition to fstab, mount the filesystem
+- [filesystem_create_all_from_key](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/create_all_from_key.md) - Create a filesystem, add a definition to fstab, mount the filesystem
 - [filesystem](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/filesystem.md) - Create a filesystem, add a definition to fstab, mount the filesystem
 - [filesystem_filebacked](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/filebacked.md) - Create a loopback filesystem
 
