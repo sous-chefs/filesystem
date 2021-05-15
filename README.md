@@ -6,7 +6,7 @@
 [![OpenCollective](https://opencollective.com/sous-chefs/sponsors/badge.svg)](#sponsors)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
-This cookbook exists to generically define and create block device filesystems with the minimum of inputs.
+This cookbook exists to define and create block device filesystems with the minimum of inputs.
 
 This cookbook supports four main types of block devices:
 

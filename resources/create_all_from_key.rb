@@ -21,3 +21,5 @@
 actions :create
 default_action :create
 
+unified_mode true
+

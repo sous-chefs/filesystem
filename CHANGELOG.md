@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- resolved cookstyle error: resources/default.rb:118:35 convention: `Style/RedundantCondition`
+- Chef 17 compatibility
+
+## 3.0.2 (2020-09-16)
+
+- resolved cookstyle error: libraries/fs.rb:14:5 convention: `Style/RedundantAssignment`
+- resolved cookstyle error: libraries/fs.rb:15:1 convention: `Layout/EmptyLinesAroundMethodBody`
+- resolved cookstyle error: libraries/fs.rb:15:1 convention: `Layout/TrailingWhitespace`
+
+## 3.0.1 (2020-08-07)
+
+- Fix README spelling errors and formatting
+
+## 3.0.0 (2020-07-30)
+
+- Simplified the filesystem freeze action code
+- Added tests for the freeze action
+- Updated the versions of platforms to test against
+- Add the device_defer attribute to the filesystem resource. If set to true and the backing device does not exist the default resource returns without processing or error.
+- Convert the lwrp resources to custom resources
+- Add dokken cookbook converges and tests to the github flow
+
+## 2.0.2 (2020-06-18)
+
+- Removed Dangerfile from rubocop.yml
+- Deleted rubocop.yml
+- Ran latest cookstyle to clean up minor style issues
+
+>>>>>>> bc9a671... Chef 17 compatibility
 ## 2.0.1 - 2020-05-20
 
 - resolved cookstyle error: providers/filebacked.rb:36:14 refactor: `ChefModernize/ShellOutHelper`
