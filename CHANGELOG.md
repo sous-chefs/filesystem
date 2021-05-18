@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Chef 17 compatibility
+- Minimum chef version set to 15.3
+
 ## 3.0.5 - *2021-08-31*
 
 - Standardise files with files in sous-chefs/repo-management
