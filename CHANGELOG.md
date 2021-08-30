@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Standardise files with files in sous-chefs/repo-management
+
+## 3.0.4 (2021-06-01)
+
+- Standardise files with files in sous-chefs/repo-management
+
 ## 3.0.3 (2020-11-09)
 
 - resolved cookstyle error: resources/default.rb:118:35 convention: `Style/RedundantCondition`
