@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Add validation to the filesystem label property, limiting to a maximum length of 12 characters.
+
 ## 4.0.0 - *2021-10-14*
 
 - Chef 17 compatibility

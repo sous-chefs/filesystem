@@ -21,7 +21,7 @@
 default_action :create
 
 # The name property is the label of the filesystem.
-property  :label, String
+property  :label, String, name_property: true, regex: /^.{1,12}$/
 
 # We have several kinds of device we might be using
 property  :device, String
@@ -80,18 +80,14 @@ action_class do
     @device ||= if @new_resource.file
                   @new_resource.device
                 elsif @new_resource.vg
-                  "/dev/mapper/#{@new_resource.vg}-#{label}"
+                  "/dev/mapper/#{@new_resource.vg}-#{new_resource.label}"
                 elsif @new_resource.uuid
                   "/dev/disk/by-uuid/#{@new_resource.uuid}"
                 elsif @new_resource.device
                   @new_resource.device
                 else
-                  "/dev/mapper/#{label}"
+                  "/dev/mapper/#{new_resource.label}"
                 end
-  end
-
-  def label
-    @label = @new_resource.label || @new_resource.name
   end
 
   # create the mount point directory
@@ -127,7 +123,7 @@ action :create do
 
     # LVM
     # We use the lvm provider directly.
-    lvm_logical_volume label do
+    lvm_logical_volume new_resource.label do
       action :create
       group vg
       size size
@@ -171,7 +167,7 @@ action :create do
       packages.each { |keyed_package| package keyed_package.to_s }
     end
 
-    Chef::Log.info "filesystem #{label} creating #{fstype} on #{device}"
+    Chef::Log.info "filesystem #{new_resource.label} creating #{fstype} on #{device}"
 
     # Install the filesystem's default package and recipes as configured in default attributes.
     mkfs_force_options = node['filesystem_tools'].fetch(fstype, nil)
