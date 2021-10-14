@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 4.0.0 - *2021-10-14*
 
 - Chef 17 compatibility
 - Minimum chef version set to 15.3
