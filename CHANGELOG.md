@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 - Remove delivery folder
+- Fix document: `nomkfs` option is not in `filesystem` resource
 
 ## 4.0.0 - *2021-10-14*
 
