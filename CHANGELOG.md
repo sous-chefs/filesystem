@@ -6,6 +6,14 @@ All notable changes to this project will be documented in this file.
 
 - Add validation to the filesystem label property, limiting to a maximum length of 12 characters.
 
+## 4.0.3 - *2023-02-14*
+
+## 4.0.2 - *2023-02-14*
+
+## 4.0.1 - *2022-10-28*
+
+- Fix document: `nomkfs` option is not in `filesystem` resource
+
 ## 4.0.0 - *2021-10-14*
 
 - Chef 17 compatibility

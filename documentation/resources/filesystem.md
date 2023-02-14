@@ -120,10 +120,6 @@ Set to true we unsafely create filesystems. If there is data it will be lost. Sh
 
 Set to true we will ignore existing filesystems and recreate them. Double Dangerous and only for unsound behaviour. Use with 'force' true.
 
-### `nomkfs` Boolean (default: false)
-
-Set to true to disable creation of the filesystem.
-
 ### `nomount` Boolean (default: false)
 
 Set to true to disable mounting of the filesystem.
