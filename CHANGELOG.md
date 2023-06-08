@@ -14,13 +14,14 @@ Standardise files with files in sous-chefs/repo-management
 
 ## 4.0.4 - *2023-03-02*
 
+- Add validation to the filesystem label property, limiting to a maximum length of 12 characters.
+
 ## 4.0.3 - *2023-02-14*
 
 ## 4.0.2 - *2023-02-14*
 
 ## 4.0.1 - *2022-10-28*
 
-- Remove delivery folder
 - Fix document: `nomkfs` option is not in `filesystem` resource
 
 ## 4.0.0 - *2021-10-14*
