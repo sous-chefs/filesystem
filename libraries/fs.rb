@@ -11,7 +11,18 @@ module FilesystemMod
 
   # Check to determine if the device is mounted.
   def mounted?(device)
-    shell_out("grep -q '#{device}' /proc/mounts").exitstatus != 0 ? nil : shell_out("grep -q '#{device}' /proc/mounts").exitstatus
+    device_path = device
+    if !File.exists?(device)
+      # Returning nil on missing file because it sure isn't mounted.
+      return nil
+    end
+
+    # If the device is a symlink the real path is obtained so the check on /proc/mounts is valid.
+    if File.symlink?(device)
+      device_path = File.realpath(device)
+    end
+
+    shell_out("grep -q '#{device_path}' /proc/mounts").exitstatus != 0 ? nil : shell_out("grep -q '#{device_path}' /proc/mounts").exitstatus
   end
 
   # Check to determine if the mount is frozen.
