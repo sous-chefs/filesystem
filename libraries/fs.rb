@@ -12,7 +12,7 @@ module FilesystemMod
   # Check to determine if the device is mounted.
   def mounted?(device)
     device_path = device
-    if !File.exist?(device)
+    unless File.exist?(device)
       # Returning nil on missing file because it sure isn't mounted.
       return
     end
