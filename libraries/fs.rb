@@ -12,9 +12,9 @@ module FilesystemMod
   # Check to determine if the device is mounted.
   def mounted?(device)
     device_path = device
-    if !File.exists?(device)
+    if !File.exist?(device)
       # Returning nil on missing file because it sure isn't mounted.
-      return nil
+      return
     end
 
     # If the device is a symlink the real path is obtained so the check on /proc/mounts is valid.
