@@ -6,6 +6,14 @@ All notable changes to this project will be documented in this file.
 
 - Support use of symlinks for device paths
 
+## 4.0.14 - *2024-05-03*
+
+- Update tested platforms
+
+## 4.0.13 - *2024-05-03*
+
+## 4.0.12 - *2024-05-02*
+
 ## 4.0.11 - *2023-09-28*
 
 ## 4.0.10 - *2023-09-04*
