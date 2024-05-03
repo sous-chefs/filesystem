@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Update tested platforms
+
 ## 4.0.13 - *2024-05-03*
 
 ## 4.0.12 - *2024-05-02*
