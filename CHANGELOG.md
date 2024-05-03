@@ -4,7 +4,33 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-- Add validation to the filesystem label property, limiting to a maximum length of 12 characters.
+- Add validation to the filesystem label property, limiting to a maximum length of 12 characters
+
+## 4.0.14 - *2024-05-03*
+
+- Update tested platforms
+
+## 4.0.13 - *2024-05-03*
+
+## 4.0.12 - *2024-05-02*
+
+## 4.0.11 - *2023-09-28*
+
+## 4.0.10 - *2023-09-04*
+
+## 4.0.9 - *2023-09-04*
+
+## 4.0.8 - *2023-06-08*
+
+Standardise files with files in sous-chefs/repo-management
+
+## 4.0.7 - *2023-05-17*
+
+## 4.0.6 - *2023-05-03*
+
+## 4.0.5 - *2023-04-01*
+
+## 4.0.4 - *2023-03-02*
 
 ## 4.0.3 - *2023-02-14*
 
@@ -120,4 +146,3 @@ All notable changes to this project will be documented in this file.
 [0.11.1]: https://github.com/sous-chefs/filesystem/compare/v0.11.0...v0.11.1
 [0.12.0]: https://github.com/sous-chefs/filesystem/compare/v0.11.1...v0.12.0
 [1.0.0]: https://github.com/sous-chefs/filesystem/compare/v0.12.0...v1.0.0
-[2.0.2 (2020-06-18)]: https://github.com/sous-chefs/filesystem/compare/v0.12.0...HEAD
