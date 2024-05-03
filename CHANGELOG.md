@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Support use of symlinks for device paths
+
 ## 4.0.14 - *2024-05-03*
 
 - Update tested platforms
