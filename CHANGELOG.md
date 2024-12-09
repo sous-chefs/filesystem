@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Add validation to the filesystem label property, limiting to a maximum length of 12 characters
+
 ## 4.0.15 - *2024-12-09*
 
 ## 4.0.14 - *2024-05-03*
@@ -38,7 +40,6 @@ Standardise files with files in sous-chefs/repo-management
 
 ## 4.0.1 - *2022-10-28*
 
-- Remove delivery folder
 - Fix document: `nomkfs` option is not in `filesystem` resource
 
 ## 4.0.0 - *2021-10-14*
