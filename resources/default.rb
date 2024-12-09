@@ -153,7 +153,7 @@ action :create do
   wait_for_device unless ::File.exist?(device) || netfs?(fstype)
 
   # We only try and create a filesystem if the device exists and is unmounted
-  unless mounted?(device)
+  unless mounted?(device: device)
 
     # Install the filesystem's default package and recipes as configured in default attributes.
     fs_tools = node['filesystem_tools'].fetch(fstype, nil)
@@ -259,9 +259,7 @@ action :mount do
       fstype fstype
       options options
       action :mount
-      # Pathname.new(mount).mountpoint? would be a better check but might
-      # cause different behavior
-      not_if "mount | grep #{device}\" \" | grep #{mount}\" \""
+      not_if { mounted?(device: device, mountpoint: mount) }
     end
 
     # set directory attributes within the mounted file system

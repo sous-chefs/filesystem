@@ -9,9 +9,33 @@ module FilesystemMod
   NET_FS_TYPES = %w(nfs nfs4 cifs smp nbd).freeze unless const_defined?(:NET_FS_TYPES)
   NFS_TYPES = %w(nfs nfs4).freeze unless const_defined?(:NFS_TYPES)
 
-  # Check to determine if the device is mounted.
-  def mounted?(device)
-    shell_out("grep -q '#{device}' /proc/mounts").exitstatus != 0 ? nil : shell_out("grep -q '#{device}' /proc/mounts").exitstatus
+  def canonical_path(path)
+    File.exist?(path) && File.realpath(path) || path
+  end
+
+  # Check to determine if a device is mounted.
+  def mounted?(params = {})
+    params.is_a?(String) && params = { device: params } # backward compatibility
+
+    mounts = File.readlines('/proc/mounts').map(&:split).map do |field|
+      {
+        device: field[0].start_with?('/dev/') && canonical_path(field[0]) || field[0],
+        mountpoint: field[1],
+      }
+    end
+
+    if params.key?(:device) && params.key?(:mountpoint)
+      mounts.select do |mount|
+        mount[:device] == canonical_path(params[:device]) &&
+          mount[:mountpoint] == params[:mountpoint].chomp('/')
+      end.any?
+    elsif params.key?(:device)
+      mounts.select { |mount| mount[:device] == canonical_path(params[:device]) }.any?
+    elsif params.key?(:mountpoint)
+      mounts.select { |mount| mount[:mountpoint] == params[:mountpoint].chomp('/') }.any?
+    else
+      raise 'Invalid parameters passed to method "mounted?"'
+    end
   end
 
   # Check to determine if the mount is frozen.
