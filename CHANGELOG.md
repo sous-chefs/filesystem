@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Fix: initialise `label` local variable on creation of file system
+
 ## 4.2.0 - *2024-12-15*
 
 - Support use of symlinks for device paths
