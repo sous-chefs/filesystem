@@ -106,6 +106,7 @@ action_class do
 end
 
 action :create do
+  label = @new_resource.label
   fstype = @new_resource.fstype
   mkfs_options = @new_resource.mkfs_options
   ignore_existing = @new_resource.ignore_existing
@@ -123,7 +124,7 @@ action :create do
 
     # LVM
     # We use the lvm provider directly.
-    lvm_logical_volume new_resource.label do
+    lvm_logical_volume label do
       action :create
       group vg
       size size
@@ -167,7 +168,7 @@ action :create do
       packages.each { |keyed_package| package keyed_package.to_s }
     end
 
-    Chef::Log.info "filesystem #{new_resource.label} creating #{fstype} on #{device}"
+    Chef::Log.info "filesystem #{label} creating #{fstype} on #{device}"
 
     # Install the filesystem's default package and recipes as configured in default attributes.
     mkfs_force_options = node['filesystem_tools'].fetch(fstype, nil)
