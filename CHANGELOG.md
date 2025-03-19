@@ -150,9 +150,6 @@ Standardise files with files in sous-chefs/repo-management
 
 ## Added
 
-[0.10.2]: https://github.com/sous-chefs/filesystem/compare/v0.8.2...v0.10.2
-[0.10.6]: https://github.com/sous-chefs/filesystem/compare/v0.10.2...v0.10.6
-[0.11.0]: https://github.com/sous-chefs/filesystem/compare/v0.10.6...v0.11.0
 [0.11.1]: https://github.com/sous-chefs/filesystem/compare/v0.11.0...v0.11.1
 [0.12.0]: https://github.com/sous-chefs/filesystem/compare/v0.11.1...v0.12.0
 [1.0.0]: https://github.com/sous-chefs/filesystem/compare/v0.12.0...v1.0.0
