@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 4.2.1 - *2025-03-20*
 
 - Fix: initialise `label` local variable on creation of file system
 
