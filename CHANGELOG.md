@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 4.2.3 - *2025-09-04*
 
 ## 4.2.2 - *2025-03-20*
 
