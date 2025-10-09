@@ -19,20 +19,20 @@ module FilesystemMod
 
     mounts = File.readlines('/proc/mounts').map(&:split).map do |field|
       {
-        device: field[0].start_with?('/dev/') && canonical_path(field[0]) || field[0],
+        device: field.first.start_with?('/dev/') && canonical_path(field.first) || field.first,
         mountpoint: field[1],
       }
     end
 
     if params.key?(:device) && params.key?(:mountpoint)
-      mounts.select do |mount|
+      mounts.any? do |mount|
         mount[:device] == canonical_path(params[:device]) &&
           mount[:mountpoint] == params[:mountpoint].chomp('/')
-      end.any?
+      end
     elsif params.key?(:device)
-      mounts.select { |mount| mount[:device] == canonical_path(params[:device]) }.any?
+      mounts.any? { |mount| mount[:device] == canonical_path(params[:device]) }
     elsif params.key?(:mountpoint)
-      mounts.select { |mount| mount[:mountpoint] == params[:mountpoint].chomp('/') }.any?
+      mounts.any? { |mount| mount[:mountpoint] == params[:mountpoint].chomp('/') }
     else
       raise 'Invalid parameters passed to method "mounted?"'
     end
@@ -45,7 +45,7 @@ module FilesystemMod
     fields = File.readlines('/proc/mounts').map(&:split).detect { |field| field[1] == mount_loc }
     raise "#{mount_loc} not mounted" unless fields
     stat = shell_out('mount', '-o', "remount,#{fields[3]}", mount_loc)
-    [MOUNT_EX_FAIL, MOUNT_EX_BUSY].include?(stat.exitstatus) ? true : false
+    [MOUNT_EX_FAIL, MOUNT_EX_BUSY].include?(stat.exitstatus) || false
   end
 
   # Check if provided filesystem type is netfs
