@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.4](https://github.com/sous-chefs/filesystem/compare/4.2.3...v4.2.4) (2025-10-15)
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#144](https://github.com/sous-chefs/filesystem/issues/144)) ([fb6d155](https://github.com/sous-chefs/filesystem/commit/fb6d155ee93debfb9ad546c10ff8344e8d0d65a2))
+
 ## 4.2.1 - *2025-03-20*
 
 * Fix: initialise `label` local variable on creation of file system
