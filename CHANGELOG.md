@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.5](https://github.com/sous-chefs/filesystem/compare/v4.2.4...v4.2.5) (2025-10-16)
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#144](https://github.com/sous-chefs/filesystem/issues/144)) ([fb6d155](https://github.com/sous-chefs/filesystem/commit/fb6d155ee93debfb9ad546c10ff8344e8d0d65a2))
+* resolve undefined local variable or method `label` error ([#135](https://github.com/sous-chefs/filesystem/issues/135)) ([caeb48f](https://github.com/sous-chefs/filesystem/commit/caeb48f5fac394d09940ee994f4d8d99bf2aa8f9))
+
 ## [4.2.4](https://github.com/sous-chefs/filesystem/compare/4.2.3...v4.2.4) (2025-10-15)
 
 
