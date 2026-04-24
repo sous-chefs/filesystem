@@ -6,6 +6,7 @@ provisioner:
   product_name: chef
   product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
   install_strategy: once
+  chef_license: accept
   deprecations_as_errors: true
   multiple_converge: 2
 
@@ -14,20 +15,33 @@ verifier:
   sudo: false
 
 platforms:
-  - name: amazonlinux2
-    driver_config:
-      box: mvbcoding/awslinux
-  - name: centos-8
-  - name: debian-10
-  - name: fedora-31
-  - name: opensuse-leap-15.1
-  - name: ubuntu-20.04
-  - name: freebsd-12
+  - name: almalinux-9
+  - name: almalinux-10
+  - name: amazonlinux-2023
+  - name: centos-stream-9
+  - name: centos-stream-10
+  - name: debian-12
+  - name: debian-13
+  - name: fedora-43
+  - name: opensuse-leap-16.0
+  - name: oraclelinux-9
+  - name: oraclelinux-10
+  - name: rockylinux-9
+  - name: rockylinux-10
+  - name: ubuntu-22.04
+  - name: ubuntu-24.04
+
+x-run-lists:
+  default: &default_run_list
+    - recipe[test::default]
+    - recipe[test::nfs]
+
+x-verifiers:
+  default: &default_verifier
+    inspec_tests:
+      - path: test/integration/default
 
 suites:
   - name: default
-    run_list:
-      - recipe[filesystem]
-      - recipe[filesystem::example]
-      - recipe[test]
-      - recipe[test::nfs]
+    run_list: *default_run_list
+    verifier: *default_verifier

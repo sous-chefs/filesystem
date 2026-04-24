@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: filesystem
 # Resource:: filebacked
@@ -18,14 +19,15 @@
 #
 
 # We default to creating the file backed loopback.
+provides :filesystem_filebacked
 default_action :create
+unified_mode true
 
 # The name property is the file to be created.
 
 property :device, String
 property :size, String
 property :sparse, [true, false], default: true
-unified_mode true
 
 action :create do
   file = @new_resource.name

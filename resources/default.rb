@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: filesystem
 # Resource:: default
@@ -18,7 +19,9 @@
 #
 
 # Our filesystem provider creates filesystems and can also mount/enable them.
+provides :filesystem
 default_action :create
+unified_mode true
 
 # The name property is the label of the filesystem.
 property  :label, String, name_property: true, regex: /^.{1,12}$/
@@ -35,6 +38,7 @@ property  :mkfs_options, String, default: ''
 property  :package, String
 property  :recipe, String
 property  :device_defer, [true, false], default: false
+property  :filesystem_tools, Hash, default: lazy { FilesystemMod::DEFAULT_FILESYSTEM_TOOLS }
 
 # LVM and filebacked
 property  :sparse, [true, false], default: true
@@ -57,8 +61,6 @@ property  :dump, Integer, default: 0, equal_to: [0, 1, 2]
 property  :force, [true, false], default: false
 # An additional thing to ignore existing filesystems - this will actively lose you data on unmounted filesystems if set.
 property  :ignore_existing, [true, false], default: false
-
-unified_mode true
 
 action_class do
   include FilesystemMod
@@ -115,7 +117,7 @@ action :create do
   sparse = @new_resource.sparse
   size = @new_resource.size
   stripes = @new_resource.stripes || nil
-  mirrors = @new_resource.mirrors ? @new_resource.stripes : nil
+  mirrors = @new_resource.mirrors || nil
   package = @new_resource.package
   force = @new_resource.force
 
@@ -156,8 +158,7 @@ action :create do
   # We only try and create a filesystem if the device exists and is unmounted
   unless mounted?(device: device)
 
-    # Install the filesystem's default package and recipes as configured in default attributes.
-    fs_tools = node['filesystem_tools'].fetch(fstype, nil)
+    fs_tools = new_resource.filesystem_tools.fetch(fstype, nil)
 
     if fs_tools && fs_tools.fetch('package', false)
       packages = fs_tools['package'].split(',')
@@ -170,8 +171,7 @@ action :create do
 
     Chef::Log.info "filesystem #{label} creating #{fstype} on #{device}"
 
-    # Install the filesystem's default package and recipes as configured in default attributes.
-    mkfs_force_options = node['filesystem_tools'].fetch(fstype, nil)
+    mkfs_force_options = new_resource.filesystem_tools.fetch(fstype, nil)
     # One day Chef will support calling dynamic include_recipe from custom resources but until then - see https://tickets.opscode.com/browse/CHEF-611
     # (fs_tools['recipe'].split(',') || []).each {|default_recipe| include_recipe #{default_recipe}"}
     if mkfs_force_options && mkfs_force_options.fetch('forceopt', false)

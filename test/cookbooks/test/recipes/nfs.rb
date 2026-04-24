@@ -5,9 +5,6 @@
 
 return unless platform_family?('debian')
 
-# apt update
-apt_update 'Update packages'
-
 filesystem 'nfs-1' do
   fstype 'nfs'
   device 'localhost:/exports/nfs1'

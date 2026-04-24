@@ -10,16 +10,16 @@ This cookbook exists to generically define and create block device filesystems w
 
 This cookbook supports four main types of block devices:
 
-- normal `device` - drives, SSDs, volumes presented by HBAs etc
-- device ID `uuid` - mostly found on drives / known block IDs.
-- LVM Volume Groups `vg` - found on systems using LVM.
-- file-backed `file` - created dynamically and looped back.
+* normal `device` - drives, SSDs, volumes presented by HBAs etc
+* device ID `uuid` - mostly found on drives / known block IDs.
+* LVM Volume Groups `vg` - found on systems using LVM.
+* file-backed `file` - created dynamically and looped back.
 
-We will try to create filesystems in two ways: through keys found in node data under 'filesystems' or by being called directly with the `filesystem` default provider. See the example recipe.
+Create filesystems by calling the `filesystem` custom resource directly, or by passing keyed data to `filesystem_create_all_from_key`.
 
-You can also use your own key for a list of filesystems, see the example recipe for an example of this option.
+See [migration.md](migration.md) for details about migrating from the removed recipe and attribute API.
 
-Tools have been listed in the following attribute key : filesystem_tools. This allows for extending the support to other/new filesystems.
+Filesystem tool defaults are exposed through the `filesystem_tools` resource property. This allows extending support to other or new filesystems without cookbook attributes.
 
 Network file systems, nfs and others, are somewhat supported. This cookbook will attempt to create a mount point, enable the filesystem by adding an `/etc/fstab` entry for the filesystem mount and will attempt to mount the filesystem.  This cookbook does not attempt to modify the internal contents of network filesystems.
 
@@ -29,67 +29,59 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ## Requirements
 
-- lvm cookbook when creating logical volumes
-- package #{fstype}progs to support your chosen fstype. We provide some defaults, too.
+* lvm cookbook when creating logical volumes
+* package #{fstype}progs to support your chosen fstype. We provide some defaults, too.
 
 ## Resources
 
-- [filesystem_create_all_from_key](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/create_all_from_key.md) - Create a filesystem, add a definition to fstab, mount the filesystem
-- [filesystem](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/filesystem.md) - Create a filesystem, add a definition to fstab, mount the filesystem
-- [filesystem_filebacked](https://github.com/sous-chefs/filesystem/blob/master/documentation/resources/filebacked.md) - Create a loopback filesystem
+* [filesystem_create_all_from_key](https://github.com/sous-chefs/filesystem/blob/master/documentation/filesystem_create_all_from_key.md) - Create multiple filesystems from keyed data
+* [filesystem](https://github.com/sous-chefs/filesystem/blob/master/documentation/filesystem_filesystem.md) - Create a filesystem, add a definition to fstab, and mount the filesystem
+* [filesystem_filebacked](https://github.com/sous-chefs/filesystem/blob/master/documentation/filesystem_filebacked.md) - Create a loopback filesystem
 
-## Main Attributes
+## Migration
 
-### `filesystems`
-
-Hash of filesytems to setup - this is called filesystems because filesystem is already created/managed by ohai (i.e. no s on the end).
-
-### `node[:filesystems]` keys
-
-Each filesytem's key is the FS `label`: This explains each key in a filesystems entry. The label must not exceed 12 characters.
-
-We also let you use your own top-level key if you want - see the default recipe and example recipe.
+Top-level recipes and attributes have been removed. See [migration.md](migration.md) for old `include_recipe 'filesystem'` and `node['filesystems']` usage, and the new resource/property API.
 
 ## Usage
 
 Keyed filesystem creation:
 
-````JSON
-{
- "filesystems": {
-   "testfs1": {
-     "device": "/dev/sdb",
-     "mount": "/db",
-     "fstype": "xfs",
-     "options": "noatime,nodev",
-     "mkfs_options": "-d sunit=128,swidth=2048"
-   },
-   "applv1": {
-     "mount": "/logical1",
-     "fstype": "ext4",
-     "vg": "standardvg",
-     "size": "20G"
-   },
-   "cluster_01": {
-     "fstype": "ocfs2",
-     "package": "ocfs2-tools",
-     "device": "/dev/mpath/ocfs01",
-     "mount": "/mnt/test"
+```ruby
+filesystem_create_all_from_key 'filesystems' do
+  filesystems(
+    'testfs1' => {
+      'device' => '/dev/sdb',
+      'mount' => '/db',
+      'fstype' => 'xfs',
+      'options' => 'noatime,nodev',
+      'mkfs_options' => '-d sunit=128,swidth=2048',
     },
-   "filebacked": {
-     "file": "/mnt/filesystem-on-a-filesystem.file",
-     "device": "/dev/loop7",
-     "mount": "/mnt/filesystem-on-a-filesystem",
-     "size": "20000"
+    'applv1' => {
+      'mount' => '/logical1',
+      'fstype' => 'ext4',
+      'vg' => 'standardvg',
+      'size' => '20G',
     }
-  }
-}
-````
+  )
+end
+```
+
+Direct filesystem creation:
+
+```ruby
+filesystem 'filebacked' do
+  file '/mnt/filesystem-on-a-filesystem.file'
+  device '/dev/loop7'
+  mount '/mnt/filesystem-on-a-filesystem'
+  size '20000'
+  action [:create, :enable, :mount]
+end
+```
 
 ## Authors
 
-- Alex Trull <cookbooks.atrullmdsol@trull.org>
-- Jesse Nelson <spheromak@gmail.com> source of the original cookbook.
+* Alex Trull <cookbooks.atrullmdsol@trull.org>
+* Jesse Nelson <spheromak@gmail.com> source of the original cookbook.
 
 ## Contributors
 

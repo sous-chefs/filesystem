@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: filesystem
 # Resource:: create_all_from_key
@@ -18,15 +19,13 @@
 #
 
 # We default to creating all filesystems found in the key
+provides :filesystem_create_all_from_key
 unified_mode true
 
-action :create do
-  # Our key is the new resource name or if not we go with filesystems
-  # The key is a node attribute name
-  key = @new_resource.name || 'filesystems'
+property :filesystems, Hash, default: lazy { node[name] || {} }
 
-  # We get our filesystems from the key in node data
-  filesystems_to_be_created = node[key] || {}
+action :create do
+  filesystems_to_be_created = new_resource.filesystems
 
   # For reach filesystem we want to make, we enter the main creation loop of calling the default filesystem provider.
   filesystems_to_be_created.each_key do |label|
@@ -43,6 +42,7 @@ action :create do
       mkfs_options fs['mkfs_options'] if fs['mkfs_options']
       recipe fs['recipe'] if fs['recipe']
       package fs['package'] if fs['package']
+      device_defer fs['device_defer'] if fs.key?('device_defer')
       sparse fs['sparse'] if fs['sparse']
       size fs['size'] if fs['size']
       stripes fs['stripes'] if fs['stripes']
@@ -55,6 +55,7 @@ action :create do
       pass fs['pass'] if fs['pass']
       dump fs['dump'] if fs['dump']
       force fs['force'] if fs['force']
+      ignore_existing fs['ignore_existing'] if fs.key?('ignore_existing')
       # We may not want to do the default action
       if fs['mount'] && fs['nomount']
         # We are not mounting the fs, but we do enable its fstab entry.
