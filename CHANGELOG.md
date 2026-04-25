@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.0.0](https://github.com/sous-chefs/filesystem/compare/v5.0.0...v6.0.0) (2026-04-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate filesystem resources ([#150](https://github.com/sous-chefs/filesystem/issues/150))
+
+### Features
+
+* migrate filesystem resources ([#150](https://github.com/sous-chefs/filesystem/issues/150)) ([1631ede](https://github.com/sous-chefs/filesystem/commit/1631edea3f0d4db029412cead8573f8b2d0ddcb5))
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#144](https://github.com/sous-chefs/filesystem/issues/144)) ([fb6d155](https://github.com/sous-chefs/filesystem/commit/fb6d155ee93debfb9ad546c10ff8344e8d0d65a2))
+* resolve undefined local variable or method `label` error ([#135](https://github.com/sous-chefs/filesystem/issues/135)) ([caeb48f](https://github.com/sous-chefs/filesystem/commit/caeb48f5fac394d09940ee994f4d8d99bf2aa8f9))
+
 ## [5.0.0](https://github.com/sous-chefs/filesystem/compare/v4.2.4...v5.0.0) (2026-04-25)
 
 
