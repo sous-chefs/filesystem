@@ -116,6 +116,8 @@ action :create do
   file = @new_resource.file
   sparse = @new_resource.sparse
   size = @new_resource.size
+  stripes = @new_resource.stripes
+  mirrors = @new_resource.mirrors
   package = @new_resource.package
   force = @new_resource.force
 
@@ -128,8 +130,8 @@ action :create do
       action :create
       group vg
       size size
-      stripes @new_resource.stripes unless @new_resource.stripes.nil?
-      mirrors @new_resource.mirrors unless @new_resource.mirrors.nil?
+      stripes stripes unless stripes.nil?
+      mirrors mirrors unless mirrors.nil?
       not_if do
         vg.nil?
       end
