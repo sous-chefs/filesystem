@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pathname'
 require 'chef/mixin/shell_out'
 
@@ -8,6 +10,13 @@ module FilesystemMod
   MOUNT_EX_BUSY = 1 unless const_defined?(:MOUNT_EX_BUSY)
   NET_FS_TYPES = %w(nfs nfs4 cifs smp nbd).freeze unless const_defined?(:NET_FS_TYPES)
   NFS_TYPES = %w(nfs nfs4).freeze unless const_defined?(:NFS_TYPES)
+  DEFAULT_FILESYSTEM_TOOLS = {
+    'ext2' => { 'package' => 'e2fsprogs', 'forceopt' => '-F' },
+    'ext3' => { 'package' => 'e2fsprogs', 'forceopt' => '-F' },
+    'ext4' => { 'package' => 'e2fsprogs', 'forceopt' => '-F' },
+    'xfs' => { 'package' => 'xfsprogs', 'forceopt' => '-f' },
+    'btrfs' => { 'package' => 'btrfs-progs', 'forceopt' => '-f' },
+  }.freeze unless const_defined?(:DEFAULT_FILESYSTEM_TOOLS)
 
   def canonical_path(path)
     File.exist?(path) && File.realpath(path) || path
